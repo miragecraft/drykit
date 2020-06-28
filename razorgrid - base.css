@@ -1,0 +1,47 @@
+html {box-sizing:border-box} *,*:before,*:after {box-sizing:inherit}
+
+i-row {
+    --gutter: 0px;
+    display: flex;
+    --w:initial; --o:initial;
+}
+
+/* hints */
+/* nested gutter    i-row i-row {--gutter:1rem}     */
+/* row spacing      i-row + i-row {margin-top: 0}   */
+
+/* stack and fold */
+
+i-col {
+    --auto-width: calc(99.999% * var(--w, 0) - var(--gutter) * (1 - var(--w, 1)));
+    width:var(--width, var(--auto-width));
+    max-width:var(--width, none);
+
+    flex-shrink:1;
+    flex-grow:calc(var(--w, 1) - var(--w, 0));
+
+    --offset: calc(99.999% * var(--o) - var(--gutter) * (1 - var(--o)) + var(--gutter));
+    margin-inline-start:var(--offset, 0);
+}
+
+i-col + i-col {
+    --offset2: calc(var(--offset) + var(--gutter));
+    margin-inline-start:var(--offset2, var(--gutter));
+}
+
+i-col > *:first-child {margin-top:0!important}
+i-col > *:last-child {margin-bottom:0!important}
+
+/* fold nested columns */
+@media only screen and (max-width: 1024px) {
+    i-row i-row {flex-direction:column}
+    i-col i-col + i-col {margin:var(--v-gutter, var(--gutter)) 0 0}
+    i-col i-col {width:100%;--offset:0;max-width:none}
+}
+
+/* collapse all columns */
+@media only screen and (max-width: 640px) {
+    i-row {flex-direction:column}
+    i-col + i-col {margin:var(--v-gutter, var(--gutter)) 0 0}
+    i-col {width:100%;--offset:0;max-width:none}
+}
