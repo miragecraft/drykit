@@ -15,7 +15,7 @@ V2 have several improvements:
   4. Much easier to stack all columns just by setting `--prefix-span` to 1 on the row instead of setting flex-direction to column and manually removing gutters and offsets.
   5. Able to set auto (equal) column width using `--span` value of `0`.
   6. Able to shrink-wrap the column using `--span` value of `-1`.
-  7. Removed the ability fixed column size to simplify codebase, set the content width and shrink-wrap the column instead.
+  7. Removed the ability to set fixed column size to simplify codebase, set the content width and shrink-wrap the column instead.
 
 Limitations:
 
