@@ -13,9 +13,13 @@ V2 have several improvements:
   2. Also includes small only `--so-span`, medium only `--mo-span` and large only `--lo-span` (only needed if you need to add more page sizes such as extra large `--x-span`) prefixes.
   3. Ability to set horizontal and vertical column order using `--order` and `--v-order`
   4. Much easier to stack all columns just by setting `--prefix-span` to 1 on the row instead of setting flex-direction to column and manually removing gutters and offsets.
-  5. Able to set auto (equal) column width using `--span` value of `0`.
-  6. Able to shrink-wrap the column using `--span` value of `-1`.
-  7. Removed the ability to set fixed column size to simplify codebase, set the content width and shrink-wrap the column instead.
+  5. Removed the ability to set fixed column size to simplify codebase, set the content width and shrink-wrap the column instead.
+
+Features:
+
+  1. Set width and offset in fractions using `--prefix-span` and `--prefix-offset`: 1/2, 2/3, 4/7 etc.
+  2. Set auto-width (equal width) by setting the span to `0`.
+  3. Shrink-wrap column (content width) by setting the span to `-1`.
 
 Limitations:
 
