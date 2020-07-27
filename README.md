@@ -10,7 +10,7 @@ At the same time, it lets me utilize different number of grid columns for differ
 V2 have several improvements:
 
   1. Refactored media query to use common conventions, column width defined using `--span` with small `--s-span`, medium `--m-span` and large `--l-span` prefixes with each affecting all larger sizes.
-  2. Also includes small only `--so-span`, medium only `--mo-span` and large only `--lo-span` (only needed for expansion use) prefixes.
+  2. Also includes small only `--so-span`, medium only `--mo-span` and large only `--lo-span` (only needed if you need to add more page sizes such as extra large `--x-span`) prefixes.
   3. Ability to set horizontal and vertical column order using `--order` and `--v-order`
   4. Much easier to stack all columns just by setting `--prefix-span` to 1 on the row instead of setting flex-direction to column and manually removing gutters and offsets.
   5. Able to set auto (equal) column width using `--span` value of `0`.
