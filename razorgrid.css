@@ -1,71 +1,95 @@
-/*  RazorGrid
+/*  RazorGrid v2
     https://www.miragecraft.com
     Licensed under MIT Open Source */
 
 html {box-sizing:border-box} *,*:before,*:after {box-sizing:inherit}
 
 i-row {
-    --gutter:0px;
-    --x-gutter: var(--gutter);
-    display: flex;
-    --w:initial; --o:initial;
+    --gutter:    0px;
+    display:     flex;
+    flex-wrap:   wrap;
 }
 
-/* hints */
-/* nested gutter    i-row i-row {--gutter:1rem}     */
-/* row spacing      i-row + i-row {margin-top: 0}   */
-
 i-col {
-    --x-w-0:var(--w, 0);
-    --x-w-1:var(--w, 1);
-    --auto-width: calc(99.999% * var(--x-w-0) - var(--x-gutter) * (1 - var(--x-w-1)));
-    --x-width: var(--width, var(--auto-width));
+    flex-shrink: 1;
+    flex-grow:   calc(var(--w) + 1);
 
-    width:var(--x-width);
-    max-width:var(--width);
+    --width:     calc(99.999% * var(--w) - var(--gutter) * (1 - var(--w)));
 
-    flex-shrink:1;
+    --x-auto:    calc((var(--w)) / (var(--w)));
+    --x-shrink:  calc((var(--w) + 1) / (var(--w) + 1));
+
+    width:       calc(var(--width) * var(--x-shrink)); 
+    max-width:   calc(var(--width) * var(--x-shrink) * var(--x-auto));
+
+    --x-full:    calc((var(--w) - 1) / (var(--w) - 1));
+    --offset:    calc(99.999% * var(--o) - var(--gutter) * (1 - var(--o)) + var(--gutter) * var(--x-full));
+ 
+    margin-inline-start: var(--offset);
+
+    --full-1:    max((var(--w) - 1) * (var(--w) - 1) * -10000 + 1, 0);
+    --full-0:    min((var(--w) - 1) * (var(--w) - 1) *  10000,     1);
     
-    --auto-grow: calc(var(--x-w-1) - var(--x-w-0));
-    --x-grow:var(--grow, var(--auto-grow));
-    flex-grow:var(--x-grow);
-
-    --x-o: var(--o);
-    --auto-offset: calc(99.999% * var(--x-o) - var(--x-gutter) * (1 - var(--x-o)) + var(--x-gutter));
-    --x-offset: var(--offset, var(--auto-offset));
-    margin-inline-start:var(--x-offset, 0);
+    --ord:       calc(var(--v-order, var(--order, 0)) * var(--full-1) + var(--order, 0) * var(--full-0));
+    order:       var(--ord);
 }
 
 i-col + i-col {
-    --x-offset2: calc(var(--x-offset) + var(--x-gutter));
-    margin-inline-start:var(--x-offset2, var(--x-gutter));
+    --first-0:     min(var(--ord) + 1, 1);
+
+    margin-inline-start: calc(var(--offset) + var(--gutter) * var(--first-0));
+    margin-inline-end:   calc(var(--gutter) * var(--x-full) * var(--o-first));
+
+    --full-not-0:  max(var(--w) - 0.999, 0);
+    --o-full:      calc(var(--full-not-0) / var(--full-not-0));
+
+    --x-first:     calc((var(--ord) + 1) / (var(--ord) + 1));
+
+    --first-not-0: min(var(--ord), 0);
+    --o-first:     calc(var(--first-not-0) / var(--first-not-0));
+
+    margin-block-start:  calc(var(--v-gutter, var(--gutter)) * var(--o-full) * var(--x-first));
+    margin-block-end:    calc(var(--v-gutter, var(--gutter)) * var(--o-full) * var(--o-first));
 }
 
-i-col > *:first-child {margin-top:0!important}
-i-col > *:last-child {margin-bottom:0!important}
+i-col > *:first-child {margin-block-start: 0!important}
+i-col > *:last-child  {margin-block-end:   0!important}
 
-/* fold nested columns */
-@media only screen and (max-width: 1024px) {
-    i-row i-row {flex-direction:column}
-    i-col i-col + i-col {margin:var(--v-gutter, var(--gutter)) 0 0}
-    i-col i-col {width:100%;--offset:0;max-width:none}
-    i-row {
-        --x-gutter: var(--fold-gutter,  var(--gutter));
-    }
+/* reset */
+i-row, [lock] {
+    /* width & offset applies to bigger sizes */
+    --s-span: initial; --so-span: initial;
+    --m-span: initial; --mo-span: initial;
+    --l-span: initial; --lo-offset: initial;
+
+    --s-offset: initial; --so-offset: initial;
+    --m-offset: initial; --mo-offset: initial;
+    --l-offset: initial; --lo-offset: initial;
+
+    --order:initial;     --v-order:initial;
+}
+/* small */
+i-col {
+    --w:   var(--so-span,   var(--s-span,   0));
+    --o:   var(--so-offset, var(--s-offset, 0));
+}
+
+/* medium */
+@media only screen and (min-width: 640px) {
     i-col {
-        --x-w-0:    var(--fold-w,       var(--w, 0));
-        --x-w-1:    var(--fold-w,       var(--w, 1));
-        --x-width:  var(--fold-width,   var(--width,    var(--auto-width)));
-        max-width:  var(--fold-width,   var(--width));
-        --x-grow:   var(--fold-grow,    var(--grow,     var(--auto-grow)));
-        --x-o:      var(--fold-o,       var(--o));
-        --x-offset: var(--fold-offset,  var(--offset));
+        --w:   var(--mo-span,   var(--m-span,   var(--s-span,   0)));
+        --o:   var(--mo-offset, var(--m-offset, var(--s-offset, 0)));
+   }
+}
+
+/* large */
+@media only screen and (min-width: 1024px) {
+    i-col {
+        --w:   var(--lo-span,   var(--l-span,   var(--m-span,   var(--s-span, 0))));
+        --o:   var(--lo-offset, var(--l-offset, var(--m-offset, var(--s-offset, 0))));
     }
 }
 
-/* stack all columns */
-@media only screen and (max-width: 640px) {
-    i-row {flex-direction:column}
-    i-col + i-col {margin:var(--v-gutter, var(--gutter)) 0 0}
-    i-col {width:100%;--offset:0;max-width:none}
-}
+/* stack */
+i-col i-row {--mo-span:1}
+i-row {--so-span:1}
