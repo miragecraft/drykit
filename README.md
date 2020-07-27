@@ -17,18 +17,20 @@ V2 have several improvements:
 
 Features:
 
-  1. Set width and offset in fractions using `--prefix-span` and `--prefix-offset`: 1/2, 2/3, 4/7 etc.
-  2. Set auto-width (equal width) by setting the span to `0`.
-  3. Shrink-wrap column (content width) by setting the span to `-1`.
+  - Set width and offset in fractions using `--prefix-span` and `--prefix-offset`: 1/2, 2/3, 4/7 etc.
+  - Set auto-width (equal width) by setting the span to `0`.
+  - Shrink-wrap column (content width) by setting the span to `-1`.
+  - Collapse columns by setting the span to `1` on the row.
+  - Prevent columns collpasing by adding `lock` attribute to the row.
 
 Limitations:
 
-  1. It does not support multiline rows, this is a conscious decision to avoid using negative margin.
-  2. There exists 2 variants with negative margin and flex-gap, both support multiline rows. They will be released when I have tweaked the codebase to my satisfaction.
+  - It does not support multiline rows, this is a conscious decision to avoid using negative margin.
+  - There exists 2 variants with negative margin and flex-gap, both support multiline rows. They will be released when I have tweaked the codebase to my satisfaction.
 
 In Development:
 
-  1. Add vertical grid similar to Foundation
-  2. Custom property name tweaks
+  - Add vertical grid similar to Foundation
+  - Custom property name tweaks
 
 For a demo, see my website at www.miragecraft.com
