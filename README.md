@@ -25,7 +25,8 @@ Features:
 
 Limitations:
 
-  - It does not support multiline rows, this is a conscious decision to avoid using negative margin.
+  - There is no negative margin to worry about, however it does not support mutiline rows.
+  - Due to lack of negative margin, styling doesn't work correctly if you moving first child back, can only move other children forward by setting `--order` or `--v-order` to `-1`.
   - There exists 2 variants with negative margin and flex-gap, both support multiline rows. They will be released when I have tweaked the codebase to my satisfaction.
 
 In Development:
