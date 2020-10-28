@@ -29,6 +29,8 @@ Features:
   - Collapse columns by setting the span to `1` on parent `.grid-x`.
   - Prevent columns from auto collapsing by adding `.lock` class to parent `.grid-x`.
   - Responsive CSS custom properties for:
+      - `--span` (grid cell span)
+      - `--offset` (grid cell offset)
       - `--display` (used for hiding content)
       - `--align` (text-align)
       - `--size` (font-size)
@@ -46,7 +48,7 @@ Features:
 Limitations:
 
   - There exists 2 variants with negative margin and flex-gap, both support multiline rows. Negative margin version has widen support, but has negative top and left margin for grid container.
-  - Vertical `.grid-y` doesn't support multiline, due to a Flexbox quirk that adds whitespace due to the way height is calculated when a Flexbox with row-direction and flex-basis 0 is nested inside a Flexbox with column direction. [CodePen]https://codepen.io/Miragecraft/pen/RwRgeqw()
+  - Vertical `.grid-y` doesn't support multiline, due to a Flexbox quirk that adds whitespace due to the way height is calculated when a Flexbox with row-direction and flex-basis 0 is nested inside a Flexbox with column direction. [Problem Demo](https://codepen.io/Miragecraft/pen/RwRgeqw)
 
 In Development for version 4:
 
