@@ -1,4 +1,4 @@
-/*  RazorGrid v3
+/*  RazorGrid v3 Flex Gap Edition
     https://www.miragecraft.com
     Licensed under MIT Open Source */
 
@@ -11,8 +11,7 @@ html {box-sizing:border-box} *,*:before,*:after {box-sizing:inherit}
     --gx: var(--gap-x, var(--gap, 0px));
     --gy: var(--gap-y, var(--gap, 0px));
 
-    margin-inline-start: calc(var(--gx) * -1);
-    margin-block-start:  calc(var(--gy) * -1);
+    gap: var(--gy) var(--gx);
 
     --full-1: max((var(--s) - 1) * (var(--s) - 1) * -10000 + 1, 0);
     --full-0: min((var(--s) - 1) * (var(--s) - 1) *  10000,     1);
@@ -22,8 +21,8 @@ html {box-sizing:border-box} *,*:before,*:after {box-sizing:inherit}
     --full-not-0:  max(var(--s) - 0.999, 0);
     --o-full:      calc(var(--full-not-0) / var(--full-not-0));
 
-    height: calc(var(--h) + var(--gy));
-    width:  calc(var(--w) + var(--gx));
+    height: calc(var(--h));
+    width:  calc(var(--w));
 }
 .grid-y {flex-direction:column}
 
@@ -34,7 +33,7 @@ html {box-sizing:border-box} *,*:before,*:after {box-sizing:inherit}
     --x-auto:    calc((var(--s)) / (var(--s)));
     --x-shrink:  calc((var(--s) + 1) / (var(--s) + 1));
 
-    --auto-span: calc(99.999% * var(--s) - var(--g));
+    --auto-span: calc(99.999% * var(--s) - var(--g) * (1 - var(--s)));
     flex-basis:  calc(var(--auto-span) * var(--x-shrink));
     --max-span:  calc(var(--auto-span) * var(--x-shrink) * var(--x-auto));
 
@@ -42,9 +41,7 @@ html {box-sizing:border-box} *,*:before,*:after {box-sizing:inherit}
     --auto-break: calc((var(--breakpoint, 0px) - 100%) * 999);
     --min-span:    clamp(0px, var(--auto-break), 100% - var(--g));
 
-    --auto-offset: calc(99.999% * var(--o) * var(--full-0) + var(--g));
-    margin-inline-start: var(--gx);
-    margin-block-start:  var(--gy);
+    --auto-offset: calc(99.999% * var(--o) - var(--g) * (1 - var(--o)) + var(--g) * var(--x-full));
     
     order: calc(var(--v-order, var(--order, 0)) * var(--full-1) + var(--order, 0) * var(--full-0));    
 
@@ -217,7 +214,7 @@ html, body {margin:0;padding:0;}
 html {-webkit-text-size-adjust: 100%}
 
 /* disable grid-y wrap due to Flexbox quirk */
-.grid-y {flex-wrap:nowrap; width: calc(var(--w))}
+.grid-y {flex-wrap:nowrap}
 .grid-y, .grid-y > * {margin-inline-start:0}
 
 /* presets */
