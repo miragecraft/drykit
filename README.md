@@ -5,33 +5,49 @@ I created this grid system for my own use - my priority is to be able to hand co
 
 At the same time, it lets me utilize different number of grid columns for different pages of a website, without having to redefine the grid template for each page (thus, utilizing Flexbox).
 
-**v2 released, still being tweaked**
+[Try Demo](http://www.miragecraft.com/projects/razorgrid.html)
 
-V2 have several improvements:
+**V3 Released**
 
-  1. Refactored media query to use common conventions, column width defined using `--span` with small `--s-span`, medium `--m-span` and large `--l-span` prefixes with each affecting all larger sizes.
-  2. Also includes small only `--so-span`, medium only `--mo-span` and large only `--lo-span` (only needed if you need to add more page sizes such as extra large `--x-span`) prefixes.
-  3. Ability to set horizontal and vertical column order using `--order` and `--v-order`
-  4. Much easier to stack all columns just by setting `--prefix-span` to 1 on the row instead of setting flex-direction to column and manually removing gutters and offsets.
-  5. Removed the ability to set fixed column size to simplify codebase, set the content width and shrink-wrap the column instead.
+_Gap Edition: requires Flexbox gap support, but removes negative margins._
+
+Breaking Change:
+
+  - `<i-row>` is changed to class of `.grid-x`, this lets you turn semantic elements such as `<main>`, `<nav>`, `<ul>`, `<dl>` etc. into grids. `<i-col>` is obsolete as style is assigned using child selector.
+  - Changed media query prefix for small (and up) from `--s-property` to `--property`, to follow convention and make property assignment more intuitive when responsiveness is not required.
+  - Removed large only `--lo-property` prefix as it's redundant.
+  - `--gutter` and `--v-gutter` for grid gap is now changed to `--gap`, `--gap-x` and `--gap-y` to align name with native CSS property name. 
 
 Features:
 
-  - Set width and offset in fractions using `--prefix-span` and `--prefix-offset`: 1/2, 2/3, 4/7 etc.
+  - Multiline support for `.grid-x`.
+  - Vertical grid via `.grid-y`.
+  - Auto-collapsing `.grid-x` at small size, nested `.grid-x` at medium size
+  - Set width and offset in fractions using `--prefix-span` and `--prefix-offset`: 1/2, 2/3, 4/7 etc. You can apply this at either the grid level or cell level.
   - Set auto-width (equal width) by setting the span to `0`.
   - Shrink-wrap column (content width) by setting the span to `-1`.
-  - Collapse columns by setting the span to `1` on the row.
-  - Prevent columns collpasing by adding `lock` attribute to the row.
+  - Collapse columns by setting the span to `1` on parent `.grid-x`.
+  - Prevent columns from auto collapsing by adding `.lock` class to parent `.grid-x`.
+  - Responsive CSS custom properties for:
+      - `--display` (used for hiding content)
+      - `--align` (text-align)
+      - `--size` (font-size)
+      - `--align-x` and `--align-y` (aligning grid cell to track)
+      - `--align-grid` (aligning grid tracks to container)
+  - Special custom properties for:
+      - `--order` and `--v-order` (vertical order) let cells change order when collapsed
+  - Container Query using `--breakpoint` (don't forget to disable auto-collapse using `.lock`)
+      - `.backfold` tells Container Query to reverse order of children when collapsed
+  - Automatic sticky footer by adding `.stretch` to `.grid-y` under `<body>`
+  - 100% height for grid when not collapsed using `.elastic`
+  - Overlay one cell over the parent grid (takes it out of the document flow) using `.overlay`
+  
 
 Limitations:
 
-  - There is no negative margin to worry about, however it does not support mutiline rows.
-  - Due to lack of negative margin, styling doesn't work correctly if you moving first child back, can only move other children forward by setting `--order` or `--v-order` to `-1`.
-  - There exists 2 variants with negative margin and flex-gap, both support multiline rows. They will be released when I have tweaked the codebase to my satisfaction.
+  - There exists 2 variants with negative margin and flex-gap, both support multiline rows. Negative margin version has widen support, but has negative top and left margin for grid container.
+  - Vertical `.grid-y` doesn't support multiline, due to a Flexbox quirk that adds whitespace due to the way height is calculated when a Flexbox with row-direction and flex-basis 0 is nested inside a Flexbox with column direction. [CodePen]https://codepen.io/Miragecraft/pen/RwRgeqw()
 
-In Development:
+In Development for version 4:
 
-  - Add vertical grid similar to Foundation
-  - Custom property name tweaks
-
-For a demo, see my website at www.miragecraft.com
+  - Sub-grid support to use discrete units for margin, padding and font sizes.
