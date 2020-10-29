@@ -52,6 +52,9 @@ Detailed Functionalities:
       - `--size` (font-size)
       - `--align-x` and `--align-y` (aligning grid cell to track)
       - `--align-grid` (aligning grid tracks to container)
+  - Responsive pre-fixes includes:
+      - Small (no prefix), Small Only `--so-property`, Medium `--m-propety`, Medium Only `--mo-property` and Large `--l-property`.
+      - Default breakpoints are set at Medium (640px and up) and Large (1024px and up)
   - Special custom properties for:
       - `--order` and `--v-order` (vertical order) let cells change order when collapsed
   - Container Query using `--breakpoint` (don't forget to disable auto-collapse using `.lock`)
