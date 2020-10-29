@@ -57,6 +57,7 @@ Detailed Functionalities:
       - Default breakpoints are set at Medium (640px and up) and Large (1024px and up)
   - Special custom properties for:
       - `--order` and `--v-order` (vertical order) let cells change order when collapsed
+  - Set grid gap (gutters) using `--gap`, `--gap-x` and `--gap-y`
   - Container Query using `--breakpoint` (don't forget to disable auto-collapse using `.lock`)
       - `.backfold` tells Container Query to reverse order of children when collapsed
   - Automatic sticky footer by adding `.stretch` to `.grid-y` under `<body>`
