@@ -47,9 +47,9 @@ Features:
 
 Limitations:
 
-  - There exists 2 variants with negative margin and flex-gap, both support multiline rows. Negative margin version has widen support, but has negative top and left margin for grid container.
-  - Vertical `.grid-y` doesn't support multiline, due to a Flexbox quirk that adds whitespace due to the way height is calculated when a Flexbox with row-direction and flex-basis 0 is nested inside a Flexbox with column direction. [Problem Demo](https://codepen.io/Miragecraft/pen/RwRgeqw)
+  - Grid container has negative top and left margin, Flexbox gap support is required to remove them but browser support is limited.
+  - Vertical `.grid-y` doesn't support multiline, due to a Flexbox quirk that adds phantom whitespace. [Problem Demonstration](https://codepen.io/Miragecraft/pen/RwRgeqw)
 
 In Development for version 4:
 
-  - Sub-grid support to use discrete units for margin, padding and font sizes.
+  - Sub-grid support that enables pre-set values for margin, padding and font sizes.
