@@ -1,7 +1,23 @@
 # RazorGrid
-Ultralight weight, zero dependency CSS grid.
+Ultra lightweight CSS framework.
 
-I created this grid system for my own use - my priority is to be able to hand code HTML/CSS without dealing with preprocessors and being able to use aribitary number of "columns" (in quotes because no actual column is used since this is based on Flexbox) without having to re-compile CSS.
+No preprocessor, no dependences. Plug and play just like the old days.
+
+Key Features:
+
+  - Extremely intuitive to use
+  - Equal width columns by default
+  - Arbitrary column width (3/7, 4/11, 5/21...) that can be mixed and matched with zero configuration
+  - Minimal HTML markup, only requires adding `.grid-x` and `.grid-y` classes to the grid containers
+  - Define behavior using CSS custom properties, apply using inline style or hide it all in external stylesheet(s)
+  - Auto collapse of columns (and special `.lock` class to prevent it)
+  - Real gutters (not fake padding gutters)
+  - Smartly chosen responsive properties
+  - Container Query
+  - Easily customizable.
+  - Tiny
+
+I started this framework for my own use - my priority is to be able to hand code HTML/CSS without dealing with pre- and post-processors and being able to use aribitary number of columns with easy to define responsive behaviors.
 
 At the same time, it lets me utilize different number of grid columns for different pages of a website, without having to redefine the grid template for each page (thus, utilizing Flexbox).
 
@@ -18,7 +34,7 @@ Breaking Change:
   - Removed large only `--lo-property` prefix as it's redundant.
   - `--gutter` and `--v-gutter` for grid gap is now changed to `--gap`, `--gap-x` and `--gap-y` to align name with native CSS property name. 
 
-Features:
+Detailed Functionalities:
 
   - Multiline support for `.grid-x`.
   - Vertical grid via `.grid-y`.
@@ -43,7 +59,7 @@ Features:
   - Automatic sticky footer by adding `.stretch` to `.grid-y` under `<body>`
   - 100% height for grid when not collapsed using `.elastic`
   - Overlay one cell over the parent grid (takes it out of the document flow) using `.overlay`
-  
+  - Better default font sizes for headings.
 
 Limitations:
 
