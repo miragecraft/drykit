@@ -66,6 +66,7 @@ Limitations:
   - Grid container has negative top and left margin, Flexbox gap support is required to remove them but browser support is limited.
   - Vertical `.grid-y` doesn't support multiline, due to a Flexbox quirk that adds phantom whitespace. [Problem Demonstration](https://codepen.io/Miragecraft/pen/RwRgeqw)
 
-In Development for version 4:
+In Development:
 
-  - Sub-grid support that enables pre-set values for margin, padding and font sizes.
+  - Better documentation
+  - Basegrid support that enables pre-set values for margin, padding and font sizes.
