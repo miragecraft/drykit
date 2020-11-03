@@ -1,7 +1,9 @@
 # RazorGrid
 Ultra lightweight CSS framework.
 
-No pre/post-processor, no dependences. Plug and play just like the old days.
+No pre/post-processors, no dependences. Plug and play just like the old days.
+
+[Try Demo](http://www.miragecraft.com/projects/razorgrid.html)
 
 Key Features:
 
@@ -15,7 +17,7 @@ Key Features:
 
 I started this framework for my own use - my priority is to be able to hand code HTML/CSS without dealing with pre- and post-processors and being able to use aribitary number of columns with easy to define responsive behaviors.
 
-[Try Demo](http://www.miragecraft.com/projects/razorgrid.html)
+Browser Support: all browsers that supports [CSS math functions](https://caniuse.com/css-math-functions).
 
 **V3 Released**
 
