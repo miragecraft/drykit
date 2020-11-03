@@ -1,25 +1,19 @@
 # RazorGrid
 Ultra lightweight CSS framework.
 
-No preprocessor, no dependences. Plug and play just like the old days.
+No pre/post-processor, no dependences. Plug and play just like the old days.
 
 Key Features:
 
-  - Extremely intuitive to use
-  - Equal width columns by default
-  - Arbitrary column width (3/7, 4/11, 5/21...) that can be mixed and matched with zero configuration
-  - Minimal HTML markup, only requires adding `.grid-x` and `.grid-y` classes to the grid containers
-  - Define behavior using CSS custom properties, apply using inline style or hide it all in external stylesheet(s)
-  - Auto collapse of columns (and special `.lock` class to prevent it)
-  - Real gutters (not fake padding gutters)
-  - Smartly chosen responsive properties
-  - Container Query
-  - Easily customizable.
-  - Tiny
+  - Minimal markup and configuration
+  - Flexbox grid with arbitrary column width (3/7, 4/11, 5/13...) in any combination
+  - Column auto-collapse
+  - Semantic CSS custom properties with smart responsive prefixes
+  - Real margin-based gutters (instead of padding gutters)
+  - Container query
+  - Zero code and toolchain dependencies
 
 I started this framework for my own use - my priority is to be able to hand code HTML/CSS without dealing with pre- and post-processors and being able to use aribitary number of columns with easy to define responsive behaviors.
-
-At the same time, it lets me utilize different number of grid columns for different pages of a website, without having to redefine the grid template for each page (thus, utilizing Flexbox).
 
 [Try Demo](http://www.miragecraft.com/projects/razorgrid.html)
 
