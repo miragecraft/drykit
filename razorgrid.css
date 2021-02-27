@@ -1,4 +1,4 @@
-/*  RazorGrid v3
+/*  RazorGrid v3.0.1
     https://www.miragecraft.com
     Licensed under MIT Open Source */
 
@@ -17,10 +17,10 @@ html {box-sizing:border-box} *,*:before,*:after {box-sizing:inherit}
     --full-1: max((var(--s) - 1) * (var(--s) - 1) * -10000 + 1, 0);
     --full-0: min((var(--s) - 1) * (var(--s) - 1) *  10000,     1);
 
-    --x-full:    calc((var(--s) - 1) / (var(--s) - 1));
+    --x-full: calc((var(--s) - 1) / (var(--s) - 1));
 
-    --full-not-0:  max(var(--s) - 0.999, 0);
-    --o-full:      calc(var(--full-not-0) / var(--full-not-0));
+    --full-not-0: max(var(--s) - 0.999, 0);
+    --o-full:     calc(var(--full-not-0) / var(--full-not-0));
 
     height: calc(var(--h) + var(--gy));
     width:  calc(var(--w) + var(--gx));
@@ -40,7 +40,7 @@ html {box-sizing:border-box} *,*:before,*:after {box-sizing:inherit}
 
     /* container query */
     --auto-break: calc((var(--breakpoint, 0px) - 100%) * 999);
-    --min-span:    clamp(0px, var(--auto-break), 100% - var(--g));
+    --min-span:   clamp(1px, var(--auto-break), 100% - var(--g));
 
     --auto-offset: calc(99.999% * var(--o) * var(--full-0) + var(--g));
     margin-inline-start: var(--gx);
@@ -48,7 +48,8 @@ html {box-sizing:border-box} *,*:before,*:after {box-sizing:inherit}
     
     order: calc(var(--v-order, var(--order, 0)) * var(--full-1) + var(--order, 0) * var(--full-0));    
 
-    display: var(--d);
+    /* should apply to all element, placed here due to Chrome bug */
+    display: var(--d, revert);
 
     position:relative;
     
@@ -84,7 +85,7 @@ html {box-sizing:border-box} *,*:before,*:after {box-sizing:inherit}
 .grid-y > *   {align-self:      var(--ax)}
 
 /* resets */
-[class*=grid]  {
+:where([class*=grid])  {
     --span:   initial; --so-span: initial;
     --m-span: initial; --mo-span: initial;
     --l-span: initial;
@@ -107,7 +108,7 @@ html {box-sizing:border-box} *,*:before,*:after {box-sizing:inherit}
     --order: initial; --v-order: initial;
 }
 
-[class*=grid], [class*=grid] > * {
+:where([class*=grid], [class*=grid] > *) {
     --align-x:   initial;   --so-align-x: initial;
     --m-align-x: initial;   --mo-align-x: initial;
     --l-align-x: initial;
@@ -125,11 +126,11 @@ html {box-sizing:border-box} *,*:before,*:after {box-sizing:inherit}
 }
 [class*=grid] > * {
     --o:  var(--so-offset,     var(--offset, 0));
-    --d:  var(--so-display,    var(--display));
     --ag: var(--so-align-grid, var(--align-grid));
 }
 * {
     --a:  var(--so-align,      var(--align));
+    --d:  var(--so-display,    var(--display));
     --fs: var(--so-size,       var(--size));
 }
 /* medium */
@@ -141,11 +142,11 @@ html {box-sizing:border-box} *,*:before,*:after {box-sizing:inherit}
     }
     [class*=grid] > * {
         --o:  var(--mo-offset,     var(--m-offset,     var(--offset, 0)));
-        --d:  var(--mo-display,    var(--m-display,    var(--display)));
         --ag: var(--mo-align-grid, var(--m-align-grid, var(--align-grid)));
     }
     * {
         --a:  var(--mo-align,      var(--m-align,      var(--align)));
+        --d:  var(--mo-display,    var(--m-display,    var(--display)));
         --fs: var(--mo-size,       var(--m-size,       var(--size)));
     }
 }
@@ -159,11 +160,11 @@ html {box-sizing:border-box} *,*:before,*:after {box-sizing:inherit}
     }
     [class*=grid] > * {
         --o:  var(--l-offset,     var(--m-offset,     var(--offset, 0)));
-        --d:  var(--l-display,    var(--m-display,    var(--display)));
         --ag: var(--l-align-grid, var(--m-align-grid, var(--align-grid)));
     }
     * {
         --a:  var(--l-align,      var(--m-align,      var(--align)));
+        --d:  var(--l-display,    var(--m-display,    var(--display)));
         --fs: var(--l-size,       var(--m-size,       var(--size)));
     }
 }
@@ -201,17 +202,17 @@ html, body {margin:0;padding:0;}
 
 /* reverse container query folding order */
 .backfold {flex-direction:row-reverse}
-.backfold > *:nth-child(1) {order:-1}
-.backfold > *:nth-child(2) {order:-2}
-.backfold > *:nth-child(3) {order:-3}
-.backfold > *:nth-child(4) {order:-4}
-.backfold > *:nth-child(5) {order:-5}
-.backfold > *:nth-child(6) {order:-6}
-.backfold > *:nth-child(7) {order:-7}
-.backfold > *:nth-child(8) {order:-8}
-.backfold > *:nth-child(9) {order:-9}
-.backfold > *:nth-child(10) {order:-10}
-.backfold > *:nth-child(11) {order:-11}
+.backfold > :nth-child(1) {order:-1}
+.backfold > :nth-child(2) {order:-2}
+.backfold > :nth-child(3) {order:-3}
+.backfold > :nth-child(4) {order:-4}
+.backfold > :nth-child(5) {order:-5}
+.backfold > :nth-child(6) {order:-6}
+.backfold > :nth-child(7) {order:-7}
+.backfold > :nth-child(8) {order:-8}
+.backfold > :nth-child(9) {order:-9}
+.backfold > :nth-child(10) {order:-10}
+.backfold > :nth-child(11) {order:-11}
 
 /* general quality of life */
 html {-webkit-text-size-adjust: 100%}
@@ -222,8 +223,7 @@ html {-webkit-text-size-adjust: 100%}
 
 /* presets */
 /* shrink header and footer */
-.grid-y > header,
-.grid-y > footer {
+.grid-y > :where(header, footer) {
     --span:-1;
 }
 
@@ -239,10 +239,8 @@ sub, sup, small {--size:smaller}
 big {--size:larger}
 
 /* auto-folding */
-/* once supported, replace with :where(.grid-x) .grid-x */
-.grid-x .grid-x {--mo-span:1}
-.grid-x {--so-span:1}
+:where(.grid-x .grid-x) {--mo-span:1}
+:where(.grid-x) {--so-span:1}
 
 /* prevent auto-folding */
-/* overcome locking with inline style or [class].className selector */
-[class].lock  {--so-span: initial; --mo-span: initial}
+:where(.lock, .lock .grid-x) {--so-span: initial; --mo-span: initial}
