@@ -1,4 +1,4 @@
-/*  RazorGrid v3.0.1
+/*  RazorGrid v3.0.2
     https://www.miragecraft.com
     Licensed under MIT Open Source */
 
@@ -66,7 +66,6 @@ html {box-sizing:border-box} *,*:before,*:after {box-sizing:inherit}
     --g: var(--gy);
     max-height: var(--max-span);
     min-height: var(--min-span);
-    margin-block-start: var(--auto-offset);
 }
 
 * {
@@ -217,13 +216,12 @@ html, body {margin:0;padding:0;}
 /* general quality of life */
 html {-webkit-text-size-adjust: 100%}
 
-/* disable grid-y wrap due to Flexbox quirk */
-.grid-y {flex-wrap:nowrap; width: calc(var(--w))}
-.grid-y, .grid-y > * {margin-inline-start:0}
+/* Nested Flexbox whitespace fix - disable grid-y wrap, remove inherited gap-x */
+.grid-y {flex-wrap:nowrap;--gx:0}
 
 /* presets */
 /* shrink header and footer */
-.grid-y > :where(header, footer) {
+:where(.grid-y > :is(header, footer)) {
     --span:-1;
 }
 
