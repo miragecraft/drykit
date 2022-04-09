@@ -5,6 +5,10 @@ No pre/post-processors, no dependences. Plug and play just like the old days.
 
 [Try Demo](http://www.miragecraft.com/projects/razorgrid.html)
 
+**April 9, 2022 - broken in latest Chrome due to zero division in calc() resolving to infinity instead of invalid. This is a spec change.**
+
+**Already fixed in development, however the current development version is a major upgrade which requires cleanup so stay tuned!** 
+
 Key Features:
 
   - Minimal markup and configuration
