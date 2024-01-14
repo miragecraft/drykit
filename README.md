@@ -10,15 +10,16 @@ Key Features:
   - No dependency and no build steps.
   - Pure CSS based solution.
   - Ultralight weight (after minification)
-  - Smart flexbox - pseudo-grid with arbitrary column width (3/7, 4/11, 5/13...) in any combination
-  - Smart grid - CSS Grid with helper variables to create common layouts and patterns easily
+  - Smart Flexbox - pseudo-grid with arbitrary column width (3/7, 4/11, 5/13...) in any combination
+  - Smart CSS Grid - shortcuts for common layouts and patterns
   - Pseudo container query - trivially easy column collapse based on parent or child width
-  - Advanced typography helpers via `.prose` and `.not-prose`, with `@scope` emulation
+  - Typography - `@scope` emulation via `.prose` and `.not-prose`
+  - Scales - linear for spacing, modular for text 
   - Per-property responsiveness based on the space toggle technique. 
 
 I started this framework for my own use - my priority is to be able to hand code HTML/CSS without dealing with any build tools while taking full advantage of modern CSS features.
 
-Browser Support: latest browsers (with CSS Nesting and `:has()` selector support).
+Browser Support: latest browsers with CSS Nesting and `:has()` selector support.
 
 **Alpha software**
 
@@ -44,6 +45,6 @@ Here's a simple explanation of each file:
 
 This is an extremely personal and opinionated framework, I make use of techniques/methods not considered good practice such as CSS `@import` and other "ugly hacks".
 
-This is in keeping with the entire contrarian/oldschool mentality of the framework, as having no build step is considered almost archiac at this point, but which I consider means freedom from restrictions and dependency hell, and lowers the bar of entry for amature webmasters to create their own website.
+This is in keeping with the entire contrarian/oldschool mentality of the framework, as having no build step is almost considered archiac at this point, but permits development via the browser dev console and lowers the bar of entry for amature webmasters.
 
 You have been warned.
