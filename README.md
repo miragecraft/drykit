@@ -1,76 +1,49 @@
-# RazorGrid
+# DryKit
 Ultra lightweight CSS framework.
 
 No pre/post-processors, no dependences. Plug and play just like the old days.
 
-[Try Demo](http://www.miragecraft.com/projects/razorgrid.html)
-
-**April 9, 2022 - broken in latest Chrome due to zero division in calc() resolving to infinity instead of invalid. This is a spec change.**
-
-**Already fixed in development, however the current development version is a major upgrade which requires cleanup so stay tuned!** 
+**Previously name RazorGrid, completely rebuilt and expanded.**
 
 Key Features:
 
-  - Minimal markup and configuration
-  - Flexbox grid with arbitrary column width (3/7, 4/11, 5/13...) in any combination
-  - Column auto-collapse
-  - Semantic CSS custom properties with smart responsive prefixes
-  - Real margin-based gutters (instead of padding gutters)
-  - Container query
-  - Zero code and toolchain dependencies
+  - No dependency and no build steps.
+  - Pure CSS based solution.
+  - Ultralight weight (after minification)
+  - Smart flexbox - pseudo-grid with arbitrary column width (3/7, 4/11, 5/13...) in any combination
+  - Smart grid - CSS Grid with helper variables to create common layouts and patterns easily
+  - Pseudo container query - trivially easy column collapse based on parent or child width
+  - Advanced typography helpers via `.prose` and `.not-prose`, with `@scope` emulation
+  - Per-property responsiveness based on the space toggle technique. 
 
-I started this framework for my own use - my priority is to be able to hand code HTML/CSS without dealing with pre- and post-processors and being able to use aribitary number of columns with easy to define responsive behaviors.
+I started this framework for my own use - my priority is to be able to hand code HTML/CSS without dealing with any build tools while taking full advantage of modern CSS features.
 
-Browser Support: all browsers that supports [CSS math functions](https://caniuse.com/css-math-functions).
+Browser Support: latest browsers (with CSS Nesting and `:has()` selector support).
 
-**V3 Released**
+**Alpha software**
 
-_Gap Edition: requires Flexbox gap support, but removes negative margins._
+Currently DryKit is alpha software, I consider it mostly feature complete and is currently using it to redesign my own website and working out the wrinkles.
 
-Breaking Change:
+Breaking change from RazorGrid: pretty much everything, as the previous framework is just a grid system which has now been rebuilt from scratch.
+ 
+**Documentation**
 
-  - `<i-row>` is changed to class of `.grid-x`, this lets you turn semantic elements such as `<main>`, `<nav>`, `<ul>`, `<dl>` etc. into grids. `<i-col>` is obsolete as style is assigned using child selector.
-  - Changed media query prefix for small (and up) from `--s-property` to `--property`, to follow convention and make property assignment more intuitive when responsiveness is not required.
-  - Removed large only `--lo-property` prefix as it's redundant.
-  - `--gutter` and `--v-gutter` for grid gap is now changed to `--gap`, `--gap-x` and `--gap-y` to align name with native CSS property name. 
+Code is self-documentating, I do plan to create more detailed documentation and examples to showcase its power once the codebase has stablized.
 
-Detailed Functionalities:
+Here's a simple explanation of each file:
 
-  - Multiline support for `.grid-x`.
-  - Vertical grid via `.grid-y`.
-  - Auto-collapsing `.grid-x` at small size, nested `.grid-x` at medium size
-  - Set width and offset in fractions using `--prefix-span` and `--prefix-offset`: 1/2, 2/3, 4/7 etc. You can apply this at either the grid level or cell level.
-  - Set auto-width (equal width) by setting the span to `0`.
-  - Shrink-wrap column (content width) by setting the span to `-1`.
-  - Collapse columns by setting the span to `1` on parent `.grid-x`.
-  - Prevent columns from auto collapsing by adding `.lock` class to parent `.grid-x`.
-  - Responsive CSS custom properties for:
-      - `--span` (grid cell span)
-      - `--offset` (grid cell offset)
-      - `--display` (used for hiding content)
-      - `--align` (text-align)
-      - `--size` (font-size)
-      - `--align-x` and `--align-y` (aligning grid cell to track)
-      - `--align-grid` (aligning grid tracks to container)
-  - Responsive pre-fixes includes:
-      - Small (no prefix), Small Only `--so-property`, Medium `--m-propety`, Medium Only `--mo-property` and Large `--l-property`.
-      - Default breakpoints are set at Medium (640px and up) and Large (1024px and up)
-  - Special custom properties for:
-      - `--order` and `--v-order` (vertical order) let cells change order when collapsed
-  - Set grid gap (gutters) using `--gap`, `--gap-x` and `--gap-y`
-  - Container Query using `--breakpoint` (don't forget to disable auto-collapse using `.lock`)
-      - `.backfold` tells Container Query to reverse order of children when collapsed
-  - Automatic sticky footer by adding `.stretch` to `.grid-y` under `<body>`
-  - 100% height for grid when not collapsed using `.elastic`
-  - Overlay one cell over the parent grid (takes it out of the document flow) using `.overlay`
-  - Better default font sizes for headings.
+ - **_import.css** - single file to import, you can also compile all the CSS files together and minify it however since this is meant for personal sites I'd rather keep the files separated and formatted for easy editing/development.
+ - **dryflight.css** - an adaptation of Tailwind's preflight.css for normalization, can swap to other resets/normalize.
+ - **dryflight-extra.css** - my own normalization/baseline styles with custom scales for spacing and text, kept separate to make upgrading/swapping out **dryflight.css** trivial.
+ - **layout.css** - smart Flexbox and Grid with pseudo container query
+ - **prose.css** - typography helps and logic, with `@scope` emulation
+ - **prose-simple.css** - optional feature to automatically remove `.prose` style from children with id or class
+ - **media.css** - Space toggle based media query
 
-Limitations:
+**Philosophy**
 
-  - Grid container has negative top and left margin, Flexbox gap support is required to remove them but browser support is limited.
-  - Vertical `.grid-y` doesn't support multiline, due to a Flexbox quirk that adds phantom whitespace. [Problem Demonstration](https://codepen.io/Miragecraft/pen/RwRgeqw)
+This is an extremely personal and opinionated framework, I make use of techniques/methods not considered good practice such as CSS `@import` and other "ugly hacks".
 
-In Development:
+This is in keeping with the entire contrarian/oldschool mentality of the framework, as having no build step is considered almost archiac at this point, but which I consider means freedom from restrictions and dependency hell, and lowers the bar of entry for amature webmasters to create their own website.
 
-  - Better documentation
-  - Basegrid support that enables pre-set values for margin, padding and font sizes.
+You have been warned.
