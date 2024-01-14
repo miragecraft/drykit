@@ -1,0 +1,146 @@
+/* ---------*/
+/* defaults */
+/* ---------*/
+
+.prose {
+  --indent:2.5rem;
+  --spacing:1.15rem;
+  overflow-wrap: break-word;
+}
+
+/* --------*/
+/* spacing */
+/* --------*/
+
+/* allow override without affecting inheritance */
+:where(.prose) {
+  --_spacing:var(--spacing);
+}
+:where(.prose *) {
+  --spacing: calc(var(--_spacing) * var(--spacing_));
+  --spacing_: 1;
+}
+/* apply */
+:where(.prose) :not(:first-child) {
+  margin-block-start:var(--spacing);
+}
+/* exceptions */
+li {
+  --spacing:0;
+}
+/* add spacing for multi-paragraph list */
+:has(> li > :is(p:not(:first-child), br) ) > li {
+  --spacing:var(--_spacing);
+}
+/* polyfill for :has() */
+@supports not selector(:has(*)) {
+  /* allow margin collapse into li */
+  li > :not(:only-child) {
+    margin-block-start:var(--spacing);
+  }
+}
+
+
+/* ------------*/
+/* indentation */
+/* ------------*/
+
+ul,ol {
+  padding-inline-start:var(--indent);
+}
+blockquote {
+  padding-inline:var(--indent);
+}
+
+/* ----------*/
+/* list-type */
+/* ----------*/
+
+ul {
+  list-style:revert;
+}
+ol {
+  list-style:decimal;
+}
+:where(ul,ol) ol {
+  list-style:lower-alpha;
+}
+:where(ul,ol) :where(ul,ol) ol {
+  list-style:lower-roman;
+}
+
+/* ---------*/
+/* headings */
+/* ---------*/
+h1,h2,h3,h4,th {
+  font-weight:bold;
+  text-wrap:balance;
+}
+
+/* -----------*/
+/* typography */
+/* -----------*/
+p {
+  text-wrap:pretty
+}
+p,h1,h2,h3,h4,h5,h6 {
+  overflow-wrap: break-word;
+}
+
+/* --------*/
+/* columns */
+/* --------*/
+
+.columns {
+  column-width: var(--basis);
+  column-count: var(--count);
+  column-gap: var(--gap);
+  column-fill: var(--fill);
+  column-rule: var(--rule);
+
+  --basis:initial;
+  --count:initial;
+  --gap:initial;
+  --fill:initial;
+  --rule:initial;
+  --inside:avoid;
+}
+
+.columns > * {
+  column-span: var(--span);
+  --span:initial;
+  break-inside: var(--inside);
+}
+
+/* clean-up */
+:not(#_#_#_#_#_#_#_#_#_#_) {
+  /* remove style outside .prose */
+  &:not(.prose, .prose *) {
+    &, &::before, &::after {
+      all:revert-layer;
+    }
+  }
+  
+  &.not-prose {
+    /* remove style from .not-prose */
+    &,
+    /* remove style inside .not-prose */
+    :where(
+      & :not(.prose):not(& .prose *),
+      & & :not(.prose):not(& & .prose *),
+      & & & :not(.prose):not(& & & .prose *)
+    ) {
+      &, &::before, &::after {
+        all:revert-layer;
+      }
+    }
+    /* no spacing for nested .prose */
+    .prose {
+      margin-block-start:revert-layer;
+    }
+    /* retain spacing for .not-prose */
+    &:not(:first-child) {
+      margin-block-start:var(--spacing);
+    }
+  }
+}

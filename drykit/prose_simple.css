@@ -1,0 +1,17 @@
+@layer prose {
+  /* clean-up */
+  :not(#_#_#_#_#_#_#_#_#_#_) {
+    /* remove style inside elements with class/id */
+    &.prose :is([class],[id]) {
+      &, & * {
+        &, &::before, &::after {
+          all:revert-layer;
+        }
+      }
+      /* retain spacing for element with class/id */
+      :not(#_) &:not(:first-child) {
+        margin-block-start:var(--spacing);
+      }
+    }
+  }
+}

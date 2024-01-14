@@ -1,0 +1,25 @@
+/* space toggle based media query */
+:root { 
+  --on: initial; --off: /*!*/;
+
+  /* positive toggle */
+  --S: var(--off);
+  --M: var(--off);
+  --L: var(--off);
+
+  /* negative toggle */
+  --x-S: var(--on);
+  --x-M: var(--on);
+  --x-L: var(--on);
+
+  /* breakpoints */
+  @media (width < 640px) {
+    --S: var(--on); --x-S: var(--off)
+  }
+  @media (640px <= width < 1024px) {
+    --M: var(--on); --x-M: var(--off)
+  }
+  @media (1024px <= width) {
+    --L: var(--on); --x-L: var(--off)
+  }
+}
