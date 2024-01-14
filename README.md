@@ -9,7 +9,7 @@ Key Features:
 
   - No dependency and no build steps.
   - Pure CSS based solution.
-  - Ultralight weight (after minification)
+  - Ultra lightweight (after minification)
   - Smart Flexbox - pseudo-grid with arbitrary column width (3/7, 4/11, 5/13...) in any combination
   - Smart CSS Grid - shortcuts for common layouts and patterns
   - Pseudo container query - trivially easy column collapse based on parent or child width
