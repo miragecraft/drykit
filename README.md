@@ -3,8 +3,6 @@ Ultra lightweight CSS framework.
 
 No pre/post-processors, no dependences. Plug and play just like the old days.
 
-**Previously name RazorGrid, completely rebuilt and expanded.**
-
 Key Features:
 
   - No dependency and no build steps.
