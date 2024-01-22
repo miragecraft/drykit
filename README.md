@@ -25,7 +25,7 @@ Browser Support: latest browsers with CSS Nesting and `:has()` selector support.
 
 Currently DryKit is alpha software, I consider it mostly feature complete and is currently using it to redesign my own website and working out the wrinkles.
 
-Breaking change from RazorGrid: pretty much everything, as the previous framework is just a grid system which has now been rebuilt from scratch.
+Breaking change from RazorGrid: pretty much everything, as the previous framework was just a grid system which has now been rebuilt from scratch.
  
 **Documentation**
 
