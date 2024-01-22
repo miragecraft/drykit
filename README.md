@@ -1,29 +1,15 @@
 # DryKit
-Ultra lightweight CSS framework.
-
-No pre/post-processors, no dependences. Plug and play just like the old days.
+Hyper-opinionated, no-build vanilla CSS framework.
 
 Key Features:
 
-  - No dependency and no build steps.
-  - Pure CSS based solution.
-  - Ultra lightweight (after minification)
-  - Smart Flexbox - pseudo-grid with arbitrary column width (3/7, 4/11, 5/13...) in any combination
-  - Smart CSS Grid - shortcuts for common layouts and patterns
-  - Pseudo container query - trivially easy column collapse based on parent or child width
-  - Typography - `@scope` emulation via `.prose` and `.not-prose`
-  - Scales - linear for spacing, modular for text 
-  - Per-property responsiveness based on the space toggle technique. 
-
-I started this framework for my own use - my priority is to be able to hand code HTML/CSS without dealing with any build tools while taking full advantage of modern CSS features.
-
-Browser Support: latest browsers with CSS Nesting and `:has()` selector support.
-
-**Alpha software**
-
-Currently DryKit is alpha software, I consider it mostly feature complete and is currently using it to redesign my own website and working out the wrinkles.
-
-Breaking change from RazorGrid: pretty much everything, as the previous framework was just a grid system which has now been rebuilt from scratch.
+  - No dependency and no build steps
+  - Superpowered Flexbox and Grid
+  - Easy column collapse based on parent or child width (simplified container query)
+  - Typography tools with `@scope` emulation as well as spacing and indentation automation
+  - Linear spacing scale and modular type scale
+  - Per-property responsiveness based on the space toggle technique
+  - Utilizes the latest CSS features available mainline browsers - Firefox, Chrome/Edge and Safari
  
 **Documentation**
 
@@ -41,8 +27,6 @@ Here's a simple explanation of each file:
 
 **Philosophy**
 
-This is an extremely personal and opinionated framework, I make use of techniques/methods not considered good practice such as CSS `@import` and other "ugly hacks".
+This is an extremely personal and opinionated framework, it deviates from accepted best practice and values ergonomics over performance, such as using CSS `@import`.
 
-This is in keeping with the entire contrarian/oldschool mentality of the framework, as having no build step is almost considered archiac at this point, but permits development via the browser dev console and lowers the bar of entry for amature webmasters.
-
-You have been warned.
+It harkens back to the era of CSS Zen Garden, and imagines what would a framework look like if developers back then had all the latest CSS features available to them.
