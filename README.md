@@ -9,7 +9,7 @@ Key Features:
   - Typography tools with `@scope` emulation as well as spacing and indentation automation
   - Linear spacing scale and modular type scale
   - Per-property responsiveness based on the space toggle technique
-  - Utilizes the latest CSS features available mainline browsers - Firefox, Chrome/Edge and Safari
+  - Utilizes the latest CSS features available in mainline browsers - Firefox, Chrome/Edge and Safari
  
 **Documentation**
 
