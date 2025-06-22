@@ -1,6 +1,9 @@
 /* Drykit CSS */
+@layer reset, baseline, vendor, layout, prose, media;
 @import "dryflight.css" layer(reset);
-@import "dryflight-extra.css" layer(main);
+@import "baseline.css" layer(baseline);
 @import "layout.css" layer(layout);
-@import "prose.css"  layer(prose);
-@import "media.css"  layer(media);
+@import "layout-extra.css" layer(layout);
+@import "layout-polyfill.css" layer(layout);
+@import "prose.css" layer(prose);
+@import "media.css" layer(media);

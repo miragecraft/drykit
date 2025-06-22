@@ -1,0 +1,193 @@
+/* container style query polyfill - Safari <18 and Firefox */
+@supports ((hanging-punctuation:none) and (not (backdrop-filter:none))) or (-moz-appearance:none) {
+
+/* ----------*/
+/* hyperflex */
+/* ----------*/
+
+[class*=flex-] {
+  &>*,
+  &>&>&>*,
+  &>&>&>&>&>*,
+  &>&>&>&>&>&>&>*,
+  &>&>&>&>&>&>&>&>&>* {
+    --_child-span-1: inherit;
+    --span: var(--_child-span-1);
+    --_child-span-2: var(--child-span);
+
+    --_child-min-span-1: inherit;
+    --min-span: var(--_child-min-span-1);
+    --_child-min-span-2: var(--child-min-span);
+
+    --_child-offset-1: inherit;
+    --offset: var(--_child-offset-1);
+    --_child-offset-2: var(--child-offset);
+
+    --_span-gap-1: inherit;
+    --_span-gap: var(--_span-gap-1);
+    --_span-gap-2: var(--_span-gap-root);
+
+    --_break-1: inherit;
+    --_break: var(--_break-1);
+    --_break-2: var(--break);
+  }
+  &>&>*,
+  &>&>&>&>*,
+  &>&>&>&>&>&>*,
+  &>&>&>&>&>&>&>&>*,
+  &>&>&>&>&>&>&>&>&>&>* {
+    --_child-span-2: inherit;
+    --span: var(--_child-span-2);
+    --_child-span-1: var(--child-span);
+
+    --_child-min-span-2: inherit;
+    --min-span: var(--_child-min-span-2);
+    --_child-min-span-1: var(--child-min-span);
+
+    --_child-offset-2: inherit;
+    --offset: var(--_child-offset-2);
+    --_child-offset-1: var(--child-offset);
+
+    --_span-gap-2: inherit;
+    --_span-gap: var(--_span-gap-2);
+    --_span-gap-1: var(--_span-gap-root);
+
+    --_break-2: inherit;
+    --_break: var(--_break-2);
+    --_break-1: var(--break);
+  }
+}
+
+/* ----------*/
+/* hypergrid */
+/* ----------*/
+
+:is(.grid, [class*=grid-]) {
+  &>*,
+  &>&>&>*,
+  &>&>&>&>&>*,
+  &>&>&>&>&>&>&>*,
+  &>&>&>&>&>&>&>&>&>* {
+    --_count-x-1: inherit;
+    --_count-x: var(--_count-x-1);
+    --_count-x-2: var(--count-x);
+
+    --_count-y-1: inherit;
+    --_count-y: var(--_count-y-1);
+    --_count-y-2: var(--count-y);
+  }
+  &>&>*,
+  &>&>&>&>*,
+  &>&>&>&>&>&>*,
+  &>&>&>&>&>&>&>&>*,
+  &>&>&>&>&>&>&>&>&>&>* {
+    --_count-x-2: inherit;
+    --_count-x: var(--_count-x-2);
+    --_count-x-1: var(--count-x);
+
+    --_count-y-2: inherit;
+    --_count-y: var(--_count-y-2);
+    --_count-y-1: var(--count-y);
+  }
+}
+
+/* ------*/
+/* space */
+/* ------*/
+
+[style*="--space-"] {
+  &>*,
+  &>&>&>*,
+  &>&>&>&>&>*,
+  &>&>&>&>&>&>&>*,
+  &>&>&>&>&>&>&>&>&>* {
+      --_space-1: inherit;
+      --_spacing-root: var(--_space-1);
+      --_space-2: var(--_space);
+  }
+  &>&>*,
+  &>&>&>&>*,
+  &>&>&>&>&>&>*,
+  &>&>&>&>&>&>&>&>*,
+  &>&>&>&>&>&>&>&>&>&>* {
+    --_space-2: inherit;
+    --_spacing-root: var(--_space-2);
+    --_space-1: var(--_space);
+  }
+  > * {
+    --spacing: var(--_spacing-root);
+    /* accept both number and length */
+    --_spacing-number: calc(var(--spacing));
+    --_spacing-length: calc(var(--spacing));
+    --_spacing: calc(
+      var(--_spacing-length) + 
+      var(--_spacing-number) * var(--_spacing-root));
+  }
+}
+
+:not([hidden], style, script, template, link) {
+  /* reset vendor margins */
+  :where([style*="--space-"]) > & {
+    margin:0;
+  }
+  :where(& ~ &) {
+    [style*="--space-x:"] > & {margin-left: var(--_spacing)}
+    [style*="--space-y:"] > & {margin-top: var(--_spacing)}
+    [style*="--space-i:"] > & {margin-inline-start: var(--_spacing)}
+    [style*="--space-k:"] > & {margin-block-start: var(--_spacing)}
+  }
+  @media (scripting:enabled) {
+    [style*="--space-"] > noscript:first-child + & {
+      margin: 0;
+    }
+  }
+}
+
+/* -------*/
+/* divide */
+/* -------*/
+
+[style*="--divide-"] {
+  &>*,
+  &>&>&>*,
+  &>&>&>&>&>*,
+  &>&>&>&>&>&>&>*,
+  &>&>&>&>&>&>&>&>&>* {
+    --_divide-1: inherit;
+    --divider: var(--_divide-1);
+    --_divide-2: var(--_divide);
+  }
+  &>&>*,
+  &>&>&>&>*,
+  &>&>&>&>&>&>*,
+  &>&>&>&>&>&>&>&>*,
+  &>&>&>&>&>&>&>&>&>&>* {
+    --_divide-2: inherit;
+    --divider: var(--_divide-2);
+    --_divide-1: var(--_divide);
+  }
+}
+
+:not([hidden], style, script, template, link) {
+  :where(& ~ &) {
+    :not([style*="--divide-reverse:"]) > & {
+      [style*="--divide-x:"] > & {border-left: var(--divider)}
+      [style*="--divide-y:"] > & {border-top: var(--divider)}
+      [style*="--divide-i:"] > & {border-inline-start: var(--divider)}
+      [style*="--divide-k:"] > & {border-block-start: var(--divider)}
+    }
+    [style*="--divide-reverse:"] > & {
+      [style*="--divide-x:"] > & {border-right: var(--divider)}
+      [style*="--divide-y:"] > & {border-bottom: var(--divider)}
+      [style*="--divide-i:"] > & {border-inline-end: var(--divider)}
+      [style*="--divide-k:"] > & {border-block-end: var(--divider)}
+    }
+  }
+  @media (scripting:enabled) {
+    [style*="--divide-"] > noscript:first-child + & {
+      border: revert-layer;
+    }
+  }
+}
+
+}

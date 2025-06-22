@@ -11,14 +11,28 @@
   --gap-x:var(--gap);
   --gap:0px;
 
-  /* inheritable */
-  --span:auto;
-  --offset:0;
+  --child-span:auto;
+  --child-min-span:0px;
+  --child-offset:0;
   --break:initial;
+
+  /* for non-nested flexbox, apply --span and --offset to children */
+  :not(&) > & {
+    --span:initial;
+    --offset:initial;
+    --child-min-span:var(--min-span, 0px);
+    --child-span:var(--span, auto);
+    --child-offset:var(--offset, 0);
+  }
 }
 .flex-y {
   flex-direction:column;
-  /* nested wrapping Flexbox in column and row direction cause extra whitespace */
+  /* prevent unintended whitespace, example:
+  div.flex-y.wrap
+    div.flex-x.grow
+      div:"phantom whitespace"
+      div
+  */
   flex-wrap:nowrap
 }
 
@@ -26,36 +40,190 @@
   /* shrink item wider than 100% */
   flex-shrink: 1;
 
-  flex-grow: max(var(--span) * -100 + 1, 0);
-  --_calc-span: calc(100% * var(--span) - var(--_span-gap) * (1 - var(--span)));
+  --_grow-toggle-prep: var(--span);
+  --_grow-toggle: var(--_grow-toggle-prep);
+  
+  flex-grow: var(--_grow-toggle);
   flex-basis: var(--span);
+  
+  --_span: calc(100% * var(--span) - var(--_span-gap) * (1 - var(--span)));
+  --_span-toggle-prep: var(--span);
+  --_span-toggle: var(--_span-toggle-prep);
+  --_span-size: min(var(--_span), var(--_span-toggle));
+
+  /* container-based breakpoint */
+  --_min-span: min(max(var(--min-span), ((var(--_break)) - 100%) * 99999), 100%);
+
+  /* universal offset */
+  --_offset-toggle: calc(1 - var(--span));
+  --_offset-number: calc(100% * var(--offset) - var(--_span-gap) * (1 - var(--offset)) + var(--_span-gap));
+  --_offset-length: var(--offset);
+  --_offset: calc((var(--_offset-number) + var(--_offset-length)) * var(--_offset-toggle));
+
+  /* reset vendor margins */
+  margin:0;
+}
+
+@property --_span {
+  syntax: "<length-percentage>";
+  inherits:false;
+  initial-value:100%;
+}
+
+@property --_span-toggle-prep {
+  syntax: "auto | shrink | grow | <length-percentage>";
+  inherits:false;
+  initial-value:100%;
+}
+
+@property --_span-toggle {
+  syntax: "auto | shrink | <length-percentage>";
+  inherits:false;
+  initial-value:0%;
+}
+
+@property --_grow-toggle-prep {
+  syntax: "grow | <integer>";
+  inherits:false;
+  initial-value:0;
+}
+
+@property --_grow-toggle {
+  syntax: "<integer>";
+  inherits:false;
+  initial-value:1;
+}
+@property --_offset-toggle {
+  syntax: "<integer>";
+  inherits:false;
+  initial-value:1;
+}
+
+@property --_offset-number {
+  syntax: "<length-percentage>";
+  inherits:false;
+  initial-value:0%;
+}
+
+@property --_offset-length {
+  syntax: "<length-percentage> | auto";
+  inherits:false;
+  initial-value:0px;
+}
+
+@property --_offset {
+  syntax: "<length-percentage> | auto";
+  inherits:false;
+  initial-value:auto;
+}
+
+[class*=flex-] {
+  --_child-span-1: var(--child-span);
+  --_child-span-2: initial;
+  > * {
+    @container style(--_child-span-1:var(--child-span)) {
+      --_child-span-1: inherit;
+      --span: var(--_child-span-1);
+      --_child-span-2: var(--child-span);
+    }
+
+    @container style(--_child-span-2:var(--child-span)) {
+      --_child-span-2: inherit;
+      --span: var(--_child-span-2);
+      --_child-span-1: var(--child-span);
+    }
+  }
+
+  --_child-min-span-1: var(--child-min-span);
+  --_child-min-span-2: initial;
+  > * {
+    @container style(--_child-min-span-1:var(--child-min-span)) {
+      --_child-min-span-1: inherit;
+      --min-span: var(--_child-min-span-1);
+      --_child-min-span-2: var(--child-min-span);
+    }
+
+    @container style(--_child-min-span-2:var(--child-min-span)) {
+      --_child-min-span-2: inherit;
+      --min-span: var(--_child-min-span-2);
+      --_child-min-span-1: var(--child-min-span);
+    }
+  }
+
+  --_child-offset-1: var(--child-offset);
+  --_child-offset-2: initial;
+  > * {
+    @container style(--_child-offset-1:var(--child-offset)) {
+      --_child-offset-1: inherit;
+      --offset: var(--_child-offset-1);
+      --_child-offset-2: var(--child-offset);
+    }
+
+    @container style(--_child-offset-2:var(--child-offset)) {
+      --_child-offset-2: inherit;
+      --offset: var(--_child-offset-2);
+      --_child-offset-1: var(--child-offset);
+    }
+  }
+
+  &.flex-x {--_span-gap-root: var(--gap-x)}
+  &.flex-y {--_span-gap-root: var(--gap-y)}
+  --_span-gap-1: var(--_span-gap-root);
+  --_span-gap-2: initial;
+  > * {
+    @container style(--_span-gap-1:var(--_span-gap-root)) {
+      --_span-gap-1: inherit;
+      --_span-gap: var(--_span-gap-1);
+      --_span-gap-2: var(--_span-gap-root);
+    }
+
+    @container style(--_span-gap-2:var(--_span-gap-root)) {
+      --_span-gap-2: inherit;
+      --_span-gap: var(--_span-gap-2);
+      --_span-gap-1: var(--_span-gap-root);
+    }
+  }
+
+  --_break-1: var(--break);
+  --_break-2: initial;
+  > * {
+    @container style(--_break-1:var(--break)) {
+      --_break-1: inherit;
+      --_break: var(--_break-1);
+      --_break-2: var(--break);
+    }
+
+    @container style(--_break-2:var(--break)) {
+      --_break-2: inherit;
+      --_break: var(--_break-2);
+      --_break-1: var(--break);
+    }
+    --_switch: var(--_break, inherit);
+  }
 }
 
 .flex-x > * {
-  --_span-gap: var(--gap-x);
-  width: var(--_calc-span);
-  /* percentage based offset only works horizontally */
-  --_calc_offset: calc((100% * var(--offset) - var(--_span-gap) * (1 - var(--offset)) + var(--_span-gap)));
-  margin-inline-start: var(--_calc_offset);
-  /* container-based breakpoint */
-  min-width: clamp(0px, (var(--break) - 100%) * 999, 100%);
+  inline-size: var(--_span-size);
+  min-inline-size: var(--_min-span);
+  margin-inline-start: var(--_offset);
 }
 
 .flex-y > * {
-  --_span-gap: var(--gap-y);
-  height: var(--_calc-span);
+  block-size: var(--_span-size);
+  min-block-size: var(--_min-span);
+  margin-block-start: var(--_offset);
 }
 
 /* child-based breakpoint */
-.flex-x > .inflate {
-  flex-grow:9999;
-  --break:0px;
-  /* use --span as breakpoint */
-  --span:var(--break)!important;
-  min-width:0;
-}
-.flex-x:has(.inflate) > :not(.inflate) {
-  flex-grow:1;
+.switch, [style*="--switch:"] {
+  .flex-x > & {
+    flex-grow:99999;
+    min-inline-size:min(100%,var(--switch, var(--_switch)));
+  }
+  .flex-x:has(> &) > :not(&) {
+    flex-grow:1;
+    --_break:0px!important;
+  }
 }
 
 /* ----------*/
@@ -70,166 +238,223 @@
   grid-template-areas:   var(--grid);
 
   /* prevent grid blowout */
-  --grid-x: repeat(var(--count-x), minmax(min(var(--min-x), 100%), var(--size-x)));
-  --grid-y: repeat(var(--count-y), minmax(min(var(--min-y), 100%), var(--size-y)));
-  --grid:   none;
+  --repeat-x: minmax(var(--min-each-x), var(--each-x));
+  --repeat-y: minmax(var(--min-each-y), var(--each-y));
 
-  /* limit max col/row */
-  --_limiter: calc(100% * 1/var(--limit) - var(--_gap) * (1 - 1/var(--limit)));
-  --limit:-1;
+  --grid-x: repeat(var(--count-x), var(--repeat-x));
+  --grid-y: repeat(var(--count-y), var(--repeat-y));
+  --grid:   none;
 
   --count-x: initial;
   --count-y: initial;
 
-  --min-x: 0px;
-  --min-y: 0px;
-  --size-x:1fr;
-  --size-y:1fr;
+  /* min/max limit for col/row */
+  --max-count:-1;
+  --min-count:1;
+  --each-basis:0px;
+
+  --_max-count: calc(100%/var(--max-count) - var(--_gap)*(1 - 1/var(--max-count)));
+  --_min-count: calc(100%/var(--min-count) - var(--_gap)*(1 - 1/var(--min-count)));
+  --_each-basis: min(var(--_min-count), max(var(--each-basis), var(--_max-count)), 100%);
+
+  --min-each-x: 0;
+  --min-each-y: 0;
+  --each-x: 1fr;
+  --each-y: auto;
 
   grid-auto-flow: var(--flow) var(--density, /*!*/);
 
   --flow: row;
-  --density:initial;
+  --density: initial;
 
   grid-auto-columns: var(--auto-x);
   grid-auto-rows:    var(--auto-y);
 
-  --auto-x: minmax(min(var(--min-x), 100%), var(--size-x));
-  --auto-y: initial;
+  --auto-x: var(--repeat-x);
+  --auto-y: var(--repeat-y);
 
   gap: var(--gap-y) var(--gap-x);
 
-  --gap-y:var(--gap);
-  --gap-x:var(--gap);
+  --gap-y: var(--gap);
+  --gap-x: var(--gap);
   /* allows gap inheritance for subgrid */
-  --gap:normal;
+  --gap: normal;
 
-  /* inheritable */
-  --span-x: 1;
-  --span-y: 1;
+  & {
+    --_count-x-1: var(--count-x);
+    --_count-x-2: initial;
+    > * {
+      @container style(--_count-x-1:var(--count-x)) {
+        --_count-x-1: inherit;
+        --_count-x: var(--_count-x-1);
+        --_count-x-2: var(--count-x);
+      }
+
+      @container style(--_count-x-2:var(--count-x)) {
+        --_count-x-2: inherit;
+        --_count-x: var(--_count-x-2);
+        --_count-x-1: var(--count-x);
+      }
+    }
+    --_count-y-1: var(--count-y);
+    --_count-y-2: initial;
+    > * {
+      @container style(--_count-y-1:var(--count-y)) {
+        --_count-y-1: inherit;
+        --_count-y: var(--_count-y-1);
+        --_count-y-2: var(--count-y);
+      }
+      
+      @container style(--_count-y-2:var(--count-y)) {
+        --_count-y-2: inherit;
+        --_count-y: var(--_count-y-2);
+        --_count-y-1: var(--count-y);
+      }
+    }
+  }
 }
 
 /* auto-layout with limiter */
 .grid-x {
-  --count-x:auto-fit;
-  --min-x: var(--_limiter);
+  --count-x: auto-fit;
+  --min-each-x: var(--_each-basis);
   --_gap: var(--gap-x);
-  --gap:0px;
+  --gap: 0px;
 }
 .grid-y {
-  --count-y:auto-fit;
-  --count-x:auto-fit;
-  --flow:column;
-  --min-y: var(--_limiter);
+  --count-y: auto-fit;
+  --flow: column;
+  --min-each-y: var(--_each-basis);
+  --each-y: 1fr;
   --_gap: var(--gap-y);  
-  --gap:0px;
+  --gap: 0px;
 }
 
 :is(.grid, [class*=grid-]) > * {
-  grid-column: var(--x);
-  grid-row: var(--y);
+  grid-area:var(--cell, revert-layer);
 
-  --x-start: span var(--span-x); --x-end: span var(--span-x);
-  --y-start: span var(--span-y); --y-end: span var(--span-y);
+  @layer {
+    grid-column: var(--cell-x);
+    grid-row: var(--cell-y);
+  }
 
-  --x: var(--x-start) / var(--x-end);
-  --y: var(--y-start) / var(--y-end);
+  --start-x: span var(--_span-x); --end-x: span var(--_span-x);
+  --start-y: span var(--_span-y); --end-y: span var(--_span-y);
 
-  /* use native grid-area for named area, fallback to shortcuts via revert-layer */ 
+  --cell-x: var(--start-x) / var(--end-x);
+  --cell-y: var(--start-y) / var(--end-y);
+
+  /* allow both fraction and integer for cell-span */
+  --_span-x_integer: var(--span-x);
+  --_span-x_fraction: calc(var(--span-x) * var(--_count-x) * max(0, var(--_span-x_integer) * -1 + 1));
+  --_span-x: calc(var(--_span-x_integer) + var(--_span-x_fraction));
+
+  --_span-y_integer: var(--span-y);
+  --_span-y_fraction: calc(var(--span-y) * var(--_count-y) * max(0, var(--_span-y_integer) * -1 + 1));
+  --_span-y: calc(var(--_span-y_integer) + var(--_span-y_fraction));
+
+  --span-x: 1;
+  --span-y: 1;
+  --cell:initial;
+
+  /* reset vendor margins */
+  margin:0;
+}
+
+@property --_span-x_integer {
+  syntax: "<integer>";
+  inherits:false;
+  initial-value:0;
+}
+
+@property --_span-x_fraction {
+  syntax:"<integer>";
+  inherits:false;
+  initial-value:0;
+}
+
+@property --_span-x {
+  syntax: "<integer>";
+  inherits:false;
+  initial-value:1;
+}
+
+@property --_span-y_integer {
+  syntax: "<integer>";
+  inherits:false;
+  initial-value:0;
+}
+
+@property --_span-y_fraction {
+  syntax:"<integer>";
+  inherits:false;
+  initial-value:0;
+}
+
+@property --_span-y {
+  syntax: "<integer>";
+  inherits:false;
+  initial-value:1;
 }
 
 /* ----------*/
 /* alignment */
 /* ----------*/
 
-:is([class*=flex-], .grid, [class*=grid-]) {
-  align-content: var(--fill-y);
-  justify-content: var(--fill-x);
+[class*=flex-], .grid, [class*=grid-] {
+  align-content:   var(--distribute-y);
+  justify-content: var(--distribute-x);
 
-  --fill-x: var(--fill);
-  --fill-y: var(--fill);
-  --fill: start;
+  --distribute-x: var(--distribute);
+  --distribute-y: var(--distribute);
+  --distribute: initial;
 
-  align-items: var(--align-y);
-  justify-items: var(--align-x);
+  align-items:   var(--child-align-y);
+  justify-items: var(--child-align-x);
 
-  --align-x: var(--align);
-  --align-y: var(--align);
-  --align: initial;
-}
-:is([class*=flex-], .grid, [class*=grid-]) > * {
-  align-self: var(--align-y);
-  justify-self: var(--align-x);
+  --child-align-x: var(--child-align);
+  --child-align-y: var(--child-align);
+  --child-align: initial;
+
+  /* for non-nested flexbox and grid, allow --align as alias for --child-align */
+  :not(&) > & {
+    --child-align-x: var(--align-x, var(--child-align));
+    --child-align-y: var(--align-y, var(--child-align));
+    --child-align: var(--align, initial);
+  }
+
+  > * {
+    align-self:   var(--align-y);
+    justify-self: var(--align-x);
+
+    --align-x: var(--align);
+    --align-y: var(--align);
+    --align: initial;    
+  }
 }
 
 .flex-y {
-  align-content: var(--fill-x);
-  justify-content: var(--fill-y);
-  justify-items: var(--align-y);
-}
-.flex-y > * {
-  align-self: var(--align-x);
-}
+  align-content: var(--distribute-x);
+  justify-content: var(--distribute-y);
+  align-items: var(--child-align-x);
 
-/* ---------------------------------------------------*/
-/* disable parameter inheritance for nested container */
-/* not sure if I should support this, will reconsider */
-/* ---------------------------------------------------*/
-
-[class*=flex-]
-> [class*=flex-] > * {
-  --span:auto;
-  --offset:0;
-  --break:initial;
-}
-
-[class*=flex-]
-> [class*=flex-].grow > * {
-  --span:0
-}
-
-:is(.grid, [class*=grid-])
-> :is(.grid, [class*=grid-]) > * {
-  --span-x: 1;
-  --span-y: 1;
-}
-
-:is([class*=flex-], .grid, [class*=grid-])
-> :is([class*=flex-], .grid, [class*=grid-]) > * {
-  --align-x: var(--align);
-  --align-y: var(--align);
-  --align: initial;
+  > * {
+    align-self: var(--align-x);
+  }
 }
 
 /* ----------*/
 /* variants */
 /* ---------*/
 
-[class*=flex-].grow {
-  --span:0
-}
-[class*=flex-].nowrap {
-  flex-wrap:nowrap
-}
-[class*=flex-].inline {
-  display:inline-flex
+[class*=flex-] {
+  &.grow {--child-span:grow}
+  &.wrap {flex-wrap:wrap}
+  &.nowrap {flex-wrap:nowrap}
+  &.inline {display:inline-flex}
 }
 
-:is(.grid, [class*=grid-]).inline {
-  display:inline-grid
-}
-:is(.grid, [class*=grid-]).dense {
-  --density:dense
-}
-
-/* -----*/
-/* flow */
-/* -----*/
-
-.flow {
-  --spacing: 0px;
-}
-.flow > :not(:first-child) {
-  margin-block-start:calc(var(--spacing) * var(--spacing_));
-  --spacing_: 1;
+.grid, [class*=grid-] {
+  &.inline {display:inline-grid}
+  &.dense {--density:dense}
 }

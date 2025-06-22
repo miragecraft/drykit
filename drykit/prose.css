@@ -4,8 +4,16 @@
 
 .prose {
   --indent:2.5rem;
-  --spacing:1.15rem;
+  --space:1.15rem;
   overflow-wrap: break-word;
+
+  --list-spacing:0;
+  --list-spacing-style:variable;
+  --marker-color:currentColor;
+  --marker-opacity:.7;
+
+  ul {--marker-gap:.35rem}
+  ol {--marker-gap:.5rem}
 }
 
 /* --------*/
@@ -14,32 +22,131 @@
 
 /* allow override without affecting inheritance */
 :where(.prose) {
-  --_spacing:var(--spacing);
+  --_spacing-root:var(--space);
 }
 :where(.prose *) {
-  --spacing: calc(var(--_spacing) * var(--spacing_));
-  --spacing_: 1;
+  --spacing: var(--_spacing-root);
+  /* accept both number and length */
+  --_spacing-number: calc(var(--spacing));
+  --_spacing-length: calc(var(--spacing));
+  --_spacing: calc(
+    var(--_spacing-length) + 
+    var(--_spacing-number) * var(--_spacing-root));
 }
 /* apply */
-:where(.prose) :not(:first-child) {
-  margin-block-start:var(--spacing);
+:where(.prose :not(:first-child)) {
+  margin-block-start:var(--_spacing);
 }
-/* exceptions */
+
+@property --_spacing-number {
+  syntax: "<number>";
+  inherits:false;
+  initial-value:0;
+}
+@property --_spacing-length {
+  syntax: "<length-percentage>";
+  inherits:false;
+  initial-value:0px;
+}
+
+/* --------*/
+/* indent */
+/* --------*/
+
+/* allow override without affecting inheritance */
+:where(.prose) {
+  --_indent-root:var(--indent);
+}
+:where(.prose *) {
+  --indent: var(--_indent-root);
+  /* accept both number and length */
+  --_indent-number: calc(var(--indent));
+  --_indent-length: calc(var(--indent));
+  --_indent: calc(
+    var(--_indent-length) + 
+    var(--_indent-number) * var(--_indent-root));
+}
+
+@property --_indent-number {
+  syntax: "<number>";
+  inherits:false;
+  initial-value:0;
+}
+@property --_indent-length {
+  syntax: "<length-percentage>";
+  inherits:false;
+  initial-value:0px;
+}
+
+/* Firefox bug fix */
+/* https://bugzilla.mozilla.org/show_bug.cgi?id=1883280 */
+br {margin:0}
+
+/* set default spacing for list items */
 li {
-  --spacing:0;
-}
-/* add spacing for multi-paragraph list */
-:has(> li > :is(p:not(:first-child), br) ) > li {
-  --spacing:var(--_spacing);
-}
-/* polyfill for :has() */
-@supports not selector(:has(*)) {
-  /* allow margin collapse into li */
-  li > :not(:only-child) {
-    margin-block-start:var(--spacing);
+  --spacing:var(--list-spacing);
+  /* inherit spacing for directly nested list */
+  > :is(ul, ol) {
+    --spacing:inherit;
+    /* apply spacing */ 
+    &:first-child {
+      margin-block-start:var(--_spacing);
+    }
   }
 }
 
+/* smart list spacing */
+@property --list-spacing-style {
+  syntax: "full | conditional | variable";
+  inherits:true;
+  initial-value:variable;
+}
+
+@container style(--list-spacing-style:full) {
+  li {--spacing:1}
+}
+@container style(--list-spacing-style:full) or style(--list-spacing-style:conditional){
+  /* if list contains paragraph, add spacing to all children */
+  :is(ul,ol):has(p) li {--spacing:1}
+}
+@container style(--list-spacing-style:variable){
+  /* if list contains paragraph, add spacing to direct children */
+  :is(ul,ol):has(p) > li {--spacing:1}
+}
+
+/* container style query polyfill - Safari <18 and Firefox */
+@supports ((hanging-punctuation:none) and (not (backdrop-filter:none))) or (-moz-appearance:none) {
+  /* only supports multiplier for --list-spacing */
+  @property --_list-spacing-0-not-full {
+    syntax: "<number> | full";
+    inherits:false;
+    initial-value:0;
+  }
+  @property --_spacing-switch {
+    syntax: "<number>";
+    inherits:false;
+    initial-value:1;
+  }
+  li {
+    --_list-spacing-0-not-full:var(--list-spacing-style);
+    --_spacing-switch:var(--_list-spacing-0-not-full);
+    --spacing: calc(var(--list-spacing) * (1 - var(--_spacing-switch)) + var(--_spacing-switch));
+  }
+  @property --_list-spacing-0-when-variable {
+    syntax: "<number> | full | conditional";
+    inherits:false;
+    initial-value:0;
+  }
+  /* if list contains paragraph, add spacing to all children */
+  :is(ul,ol):has(p) li {
+    --_list-spacing-0-when-variable:var(--list-spacing-style);
+    --_spacing-switch:var(--_list-spacing-0-when-variable);
+  }
+  /* if list contains paragraph, add spacing to direct children */
+  :is(ul,ol):has(p) > li {
+    --spacing:1;
+  }
+}
 
 /* ------------*/
 /* indentation */
@@ -51,6 +158,9 @@ ul,ol {
 blockquote {
   padding-inline:var(--indent);
 }
+dd {
+  margin-inline-start:var(--indent);
+}
 
 /* ----------*/
 /* list-type */
@@ -61,30 +171,62 @@ ul {
 }
 ol {
   list-style:decimal;
-}
-:where(ul,ol) ol {
-  list-style:lower-alpha;
-}
-:where(ul,ol) :where(ul,ol) ol {
-  list-style:lower-roman;
+  > li > ol {
+    list-style:lower-alpha;
+    > li > ol {
+      list-style:lower-roman;
+    }
+  }
 }
 
-/* ---------*/
-/* headings */
-/* ---------*/
-h1,h2,h3,h4,th {
-  font-weight:bold;
-  text-wrap:balance;
+/* Firefox list-style-type:circle too thin
+https://bugzilla.mozilla.org/show_bug.cgi?id=1934459
+*/
+@supports (-moz-appearance:none) {
+  li ul > li  {
+    list-style-type:"\26AC\0020\0020";
+  }
+  li li ul > li {
+    list-style-type:revert-layer
+  } 
+}
+
+/* -------*/
+/* marker */
+/* -------*/
+
+::marker,
+summary:before {
+  color: oklch(from var(--marker-color) l c h / var(--marker-opacity))
+}
+
+/* ::marker gap */
+li {
+  margin-inline-start:calc(var(--_marker-gap) * -1);
+  padding-inline-start:var(--_marker-gap);
+  /* Chrome and Firefox - min gap .25em */
+  --_marker-gap: max(0px, var(--marker-gap) - .25em);
+  /* Safari - min gap .51em */
+  @supports (-webkit-hyphens: none) {
+    --_marker-gap: max(0px, var(--marker-gap) - .51em);
+  }
 }
 
 /* -----------*/
 /* typography */
 /* -----------*/
+h1,h2,h3,h4,th {
+  font-weight:bold;
+  text-wrap:balance;
+}
 p {
   text-wrap:pretty
 }
 p,h1,h2,h3,h4,h5,h6 {
   overflow-wrap: break-word;
+}
+dt {
+  font-weight:bold;
 }
 
 /* --------*/
@@ -118,6 +260,9 @@ p,h1,h2,h3,h4,h5,h6 {
   &:not(.prose, .prose *) {
     &, &::before, &::after {
       all:revert-layer;
+      /* cannot use revert-layer due to
+      https://bugs.webkit.org/show_bug.cgi?id=285370 */
+      --spacing:var(--_spacing-root);
     }
   }
   
@@ -133,14 +278,36 @@ p,h1,h2,h3,h4,h5,h6 {
       &, &::before, &::after {
         all:revert-layer;
       }
+      > * {--spacing:var(--_spacing-root)}
     }
     /* no spacing for nested .prose */
     .prose {
       margin-block-start:revert-layer;
     }
+    /* reset vendor margins */
+    & {margin:0}
     /* retain spacing for .not-prose */
     &:not(:first-child) {
-      margin-block-start:var(--spacing);
+      margin-block-start:var(--_spacing);
+    }
+  }
+
+  /* simple prose, any class or id acts like .not-prose */
+  &.simple.prose :is([class]):not(.prose) {
+    &, & * {
+      &, &::before, &::after {
+        all:revert-layer;
+      }
+    }
+    & * {--spacing:var(--_spacing-root)}
+
+    /* reset vendor margins */
+    :not(#_) &:not(& > &){
+      margin:0;
+      /* retain spacing for element with class/id */
+      &:not(:first-child) {
+        margin-block-start:var(--_spacing);
+      }
     }
   }
 }

@@ -1,9 +1,10 @@
-/* Based on Tailwind Preflight v3.4.1
+/* Based on Tailwind Preflight v3.4.13
+https://unpkg.com/tailwindcss@3.4.13/src/css/preflight.css
 
-- converted all PostCSS variables to CSS variables.
-- removed ::before/after with --tw-content
-- removed anchor tag reset
-
+- convert selected PostCSS variables to CSS variables.
+- convert --tw-content to --before/--after
+- remove anchor tag
+- remove input:where(), not needed with @layer
 */
 
 *,
@@ -12,8 +13,16 @@
   box-sizing: border-box;
   border-width: 0;
   border-style: solid;
-  border-color: var(--border-color, currentColor);
+  border-color: currentColor;
 }
+
+/* shortcuts to before/after content */
+* {
+  --before:initial;
+  --after:initial;
+}
+::before {content: var(--before, revert)}
+::after {content: var(--after, revert)}
 
 /*
 1. Use a consistent sensible line-height in all browsers.
@@ -163,6 +172,7 @@ textarea {
   font-size: 100%; /* 1 */
   font-weight: inherit; /* 1 */
   line-height: inherit; /* 1 */
+  letter-spacing: inherit; /* 1 */
   color: inherit; /* 1 */
   margin: 0; /* 2 */
   padding: 0; /* 3 */

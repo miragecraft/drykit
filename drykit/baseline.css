@@ -1,0 +1,192 @@
+/* default line-height */
+html,
+:host {
+  line-height: 1.15;
+}
+
+/* alt text */
+img {
+  font-style:italic;
+}
+
+/* fullscreens html+body, allow padding on html and % height */
+html {
+  min-height:100%;
+  display:grid;
+  /* prevent blowout */
+  grid-auto-columns:minmax(0,1fr);
+}
+
+/* allow horiztonal scroll */
+pre code {
+  display: block;
+  overflow-x: auto;
+}
+
+/* inline utilities */
+[style*='--line-clamp:'] {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--line-clamp);
+}
+
+/* a11y */
+.sr-only:not(:focus):not(:active):not(:focus-within) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* interaction hint */
+summary,
+label[for],
+label:has(input) {
+  cursor:pointer;
+}
+
+/* fix tiny marker in Safari, add animation */
+/* border trick and SVG both cause blurriness in Firefox, clip-path is best */
+summary {
+  list-style-type: none;
+  &::before {
+    content: "";
+    display:inline-block;
+    height:.6em;
+    background:currentColor;
+    aspect-ratio: 1/1;
+    clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+    margin-right:.4em;
+    transition: transform 0.25s ease;
+  }
+}
+details[open] > summary:before {
+  transform: rotate(90deg);
+}
+
+/* "soft-hide" SVG, allow <filter>, <symbol>, <pattern> etc. to work */
+svg[hidden] {
+  display: revert;
+  visibility: hidden;
+  position: absolute;
+}
+
+/* "hard-hide" SVG, for performance */
+svg[data-hidden] {
+  display: none;
+}
+
+
+/* mask colorization */
+img[style*="--mask:"] {
+  object-position:9999in;
+  background:currentColor;
+  --mask_: var(--mask) center / contain no-repeat;
+  -webkit-mask:var(--mask_);
+  mask: var(--mask_);
+}
+/* allow relative URL  */
+@property --mask {
+  syntax: "<url>";
+  inherits: true;
+  initial-value: url();
+}
+
+:root {
+  /* modular scale */
+
+  /* font */
+  --f-scale: 1.15;
+
+  --f-5: calc(var(--f0) * pow(var(--f-scale),-5));
+  --f-4: calc(var(--f0) * pow(var(--f-scale),-4));
+  --f-3: calc(var(--f0) * pow(var(--f-scale),-3));
+  --f-2: calc(var(--f0) * pow(var(--f-scale),-2));
+  --f-1-5: calc(var(--f0) * pow(var(--f-scale),-1.5));
+  --f-1: calc(var(--f0) * pow(var(--f-scale),-1));
+  --f-0-5: calc(var(--f0) * pow(var(--f-scale),-.5));
+  --f0: 1rem;
+  --f0-5: calc(var(--f0) * pow(var(--f-scale),0.5));
+  --f1: calc(var(--f0) * pow(var(--f-scale),1));
+  --f1-5: calc(var(--f0) * pow(var(--f-scale),1.5));
+  --f2: calc(var(--f0) * pow(var(--f-scale),2));
+  --f2-5: calc(var(--f0) * pow(var(--f-scale),2.5));
+  --f3: calc(var(--f0) * pow(var(--f-scale),3));
+  --f3-5: calc(var(--f0) * pow(var(--f-scale),3.5));
+  --f4: calc(var(--f0) * pow(var(--f-scale),4));
+  --f4-5: calc(var(--f0) * pow(var(--f-scale),4.5));
+  --f5: calc(var(--f0) * pow(var(--f-scale),5));
+  --f5-5: calc(var(--f0) * pow(var(--f-scale),5.5));
+  --f6: calc(var(--f0) * pow(var(--f-scale),6));
+  --f7: calc(var(--f0) * pow(var(--f-scale),7));
+  --f8: calc(var(--f0) * pow(var(--f-scale),8));
+  --f9: calc(var(--f0) * pow(var(--f-scale),9));
+  --f10: calc(var(--f0) * pow(var(--f-scale),10));
+
+  /* spacing */
+  --0-25:calc(var(--1) / 4);
+  /* tailwind default */
+  --0-5:calc(var(--1) / 2);
+  --1:  0.25rem;
+  --1-5:calc(var(--1) * 1.5);
+  --2:  calc(var(--1) * 2);
+  --2-5:calc(var(--1) * 2.5);
+  --3:  calc(var(--1) * 3);
+  --3-5:calc(var(--1) * 3.5);
+  --4:  calc(var(--1) * 4);
+  --5:  calc(var(--1) * 5);
+  --6:  calc(var(--1) * 6);
+  --7:  calc(var(--1) * 7);
+  --8:  calc(var(--1) * 8);
+  --9:  calc(var(--1) * 9);
+  --10: calc(var(--1) * 10);
+  --11: calc(var(--1) * 11);
+  --12: calc(var(--1) * 12);
+  --14: calc(var(--1) * 14);
+  --16: calc(var(--1) * 16);
+  --20: calc(var(--1) * 20);
+  --24: calc(var(--1) * 24);
+  --28: calc(var(--1) * 28);
+  --32: calc(var(--1) * 32);
+  --36: calc(var(--1) * 36);
+  --40: calc(var(--1) * 40);
+  --44: calc(var(--1) * 44);
+  --48: calc(var(--1) * 48);
+  --52: calc(var(--1) * 52);
+  --56: calc(var(--1) * 56);
+  --60: calc(var(--1) * 60);
+  --64: calc(var(--1) * 64);
+  --72: calc(var(--1) * 72);
+  --80: calc(var(--1) * 80);
+  --96: calc(var(--1) * 96);
+
+ /* colors */
+
+ --ink: currentColor;
+ --ink-bg: transparent;
+ --ink-5: color-mix(in Oklch, var(--ink) 5%, var(--ink-bg));
+ --ink-10: color-mix(in Oklch, var(--ink) 10%, var(--ink-bg));
+ --ink-15: color-mix(in Oklch, var(--ink) 15%, var(--ink-bg));
+ --ink-20: color-mix(in Oklch, var(--ink) 20%, var(--ink-bg));
+ --ink-25: color-mix(in Oklch, var(--ink) 25%, var(--ink-bg));
+ --ink-30: color-mix(in Oklch, var(--ink) 30%, var(--ink-bg));
+ --ink-35: color-mix(in Oklch, var(--ink) 35%, var(--ink-bg));
+ --ink-40: color-mix(in Oklch, var(--ink) 40%, var(--ink-bg));
+ --ink-45: color-mix(in Oklch, var(--ink) 45%, var(--ink-bg));
+ --ink-50: color-mix(in Oklch, var(--ink) 50%, var(--ink-bg));
+ --ink-55: color-mix(in Oklch, var(--ink) 55%, var(--ink-bg));
+ --ink-60: color-mix(in Oklch, var(--ink) 60%, var(--ink-bg));
+ --ink-65: color-mix(in Oklch, var(--ink) 65%, var(--ink-bg));
+ --ink-70: color-mix(in Oklch, var(--ink) 70%, var(--ink-bg));
+ --ink-75: color-mix(in Oklch, var(--ink) 75%, var(--ink-bg));
+ --ink-80: color-mix(in Oklch, var(--ink) 80%, var(--ink-bg));
+ --ink-85: color-mix(in Oklch, var(--ink) 85%, var(--ink-bg));
+ --ink-90: color-mix(in Oklch, var(--ink) 90%, var(--ink-bg));
+ --ink-95: color-mix(in Oklch, var(--ink) 95%, var(--ink-bg));
+}
