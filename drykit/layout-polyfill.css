@@ -1,5 +1,9 @@
-/* container style query polyfill - Safari <18 and Firefox */
-@supports ((hanging-punctuation:none) and (not (backdrop-filter:none))) or (-moz-appearance:none) {
+/* container style query polyfill */
+@supports
+  /* Safari <18 */
+  ((hanging-punctuation:none) and (not (backdrop-filter:none))) or
+  /* Firefox <151 */
+  ((-moz-appearance:none) and (not (position-anchor:normal))) {
 
 /* ----------*/
 /* hyperflex */

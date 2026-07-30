@@ -114,8 +114,12 @@ li {
   :is(ul,ol):has(p) > li {--spacing:1}
 }
 
-/* container style query polyfill - Safari <18 and Firefox */
-@supports ((hanging-punctuation:none) and (not (backdrop-filter:none))) or (-moz-appearance:none) {
+/* container style query polyfill */
+@supports
+  /* Safari <18 */
+  ((hanging-punctuation:none) and (not (backdrop-filter:none))) or
+  /* Firefox <151 */
+  ((-moz-appearance:none) and (not (position-anchor:normal))) {
   /* only supports multiplier for --list-spacing */
   @property --_list-spacing-0-not-full {
     syntax: "<number> | full";
@@ -255,58 +259,116 @@ dt {
 }
 
 /* clean-up */
+
+.prose:not(.simple) {
+  --prose: true;
+  .not-prose { --prose: initial }
+}
+
+.simple.prose {
+  --simple-prose: true;
+  [class] {--simple-prose: initial}
+}
+
 :not(#_#_#_#_#_#_#_#_#_#_) {
-  /* remove style outside .prose */
-  &:not(.prose, .prose *) {
+  &:is(html, .not-prose) {
     &, &::before, &::after {
-      all:revert-layer;
-      /* cannot use revert-layer due to
-      https://bugs.webkit.org/show_bug.cgi?id=285370 */
-      --spacing:var(--_spacing-root);
+      all: revert-layer;
     }
   }
-  
   &.not-prose {
-    /* remove style from .not-prose */
-    &,
-    /* remove style inside .not-prose */
-    :where(
-      & :not(.prose):not(& .prose *),
-      & & :not(.prose):not(& & .prose *),
-      & & & :not(.prose):not(& & & .prose *)
-    ) {
-      &, &::before, &::after {
-        all:revert-layer;
-      }
-      > * {--spacing:var(--_spacing-root)}
-    }
-    /* no spacing for nested .prose */
-    .prose {
-      margin-block-start:revert-layer;
-    }
     /* reset vendor margins */
-    & {margin:0}
-    /* retain spacing for .not-prose */
+    margin: 0;
     &:not(:first-child) {
-      margin-block-start:var(--_spacing);
+      margin-block-start: var(--_spacing);
     }
   }
 
-  /* simple prose, any class or id acts like .not-prose */
-  &.simple.prose :is([class]):not(.prose) {
-    &, & * {
+  @container style(--simple-prose) {
+    &[class] {
       &, &::before, &::after {
-        all:revert-layer;
+        all: revert-layer;
+      }
+      /* reset vendor margins */
+      margin: 0;
+      &:not(:first-child) {
+        margin-block-start: var(--_spacing);
       }
     }
-    & * {--spacing:var(--_spacing-root)}
+  }
 
-    /* reset vendor margins */
-    :not(#_) &:not(& > &){
-      margin:0;
-      /* retain spacing for element with class/id */
+  @container not (style(--prose) or style(--simple-prose)) {
+    &:not(.prose) {
+      &, &::before, &::after {
+        all: revert-layer;
+        /* cannot use revert-layer due to
+        https://bugs.webkit.org/show_bug.cgi?id=285370 */
+        --spacing: var(--_spacing-root);
+      }
+    }
+  }
+}
+
+/* container style query polyfill */
+@supports
+  /* Safari <18 */
+  ((hanging-punctuation:none) and (not (backdrop-filter:none))) or
+  /* Firefox <151 */
+  ((-moz-appearance:none) and (not (position-anchor:normal))) {
+  /* polyfill only support 3x nesting */
+  :not(#_#_#_#_#_#_#_#_#_#_) {
+    /* remove style outside .prose */
+    &:not(.prose, .prose *) {
+      &, &::before, &::after {
+        all:revert-layer;
+        /* cannot use revert-layer due to
+        https://bugs.webkit.org/show_bug.cgi?id=285370 */
+        --spacing:var(--_spacing-root);
+      }
+    }
+    
+    &.not-prose {
+      /* remove style from .not-prose */
+      &,
+      /* remove style inside .not-prose */
+      :where(
+        & :not(.prose):not(& .prose *),
+        & & :not(.prose):not(& & .prose *),
+        & & & :not(.prose):not(& & & .prose *)
+      ) {
+        &, &::before, &::after {
+          all:revert-layer;
+        }
+        > * {--spacing:var(--_spacing-root)}
+      }
+      /* no spacing for nested .prose */
+      .prose {
+        margin-block-start:revert-layer;
+      }
+      /* reset vendor margins */
+      & {margin:0}
+      /* retain spacing for .not-prose */
       &:not(:first-child) {
         margin-block-start:var(--_spacing);
+      }
+    }
+
+    /* simple prose, any class or id acts like .not-prose */
+    &.simple.prose :is([class]):not(.prose) {
+      &, & * {
+        &, &::before, &::after {
+          all:revert-layer;
+        }
+      }
+      & * {--spacing:var(--_spacing-root)}
+
+      /* reset vendor margins */
+      :not(#_) &:not(& > &){
+        margin:0;
+        /* retain spacing for element with class/id */
+        &:not(:first-child) {
+          margin-block-start:var(--_spacing);
+        }
       }
     }
   }
