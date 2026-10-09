@@ -7,8 +7,10 @@
   --_space: var(--space-x,
             var(--space-y,
             var(--space-i,
-            var(--space-k
-          ))));
+            var(--space-k,
+            /* prose hook */
+            var(--space,
+          )))));
 
   --_space-1: var(--_space);
   --_space-2: initial;
